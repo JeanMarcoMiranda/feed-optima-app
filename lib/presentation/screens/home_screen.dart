@@ -8,7 +8,18 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text('Food Optima')),
+        title: const Center(
+            child: Text(
+          'Food Optima',
+          style: TextStyle(
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
+        )),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(15),
+          ),
+        ),
+        toolbarHeight: 70,
       ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -31,6 +42,7 @@ class HomeScreen extends StatelessWidget {
               imgURL:
                   "https://lasventastour.com/wp-content/uploads/2020/01/Toro-Bravo-Las-Ventas-Tour-2.png",
             ),
+            SizedBox(height: 30),
             CardWidget(
               cardText: "Vaca",
               imgURL:

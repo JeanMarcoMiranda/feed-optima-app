@@ -24,10 +24,8 @@ class CardWidget extends StatelessWidget {
             // borderRadius: BorderRadius.circular(10.0),
             child: Image.network(
               imgURL,
-              height:
-                  0.25 * screenHeight, // ajusta la altura según tus necesidades
-              width:
-                  0.85 * screenWidth, // ajusta el ancho según tus necesidades
+              height: 0.25 * screenHeight,
+              width: 0.85 * screenWidth,
               fit: BoxFit.cover,
             ),
           ),
@@ -38,12 +36,5 @@ class CardWidget extends StatelessWidget {
         ],
       ),
     );
-    // return Padding(
-    //   padding: const EdgeInsets.all(8.0),
-    //   child: SizedBox(
-    //       height: 200,
-    //       width: double.infinity,
-    //       child: Card(child: Text(cardText))),
-    // );
   }
 }

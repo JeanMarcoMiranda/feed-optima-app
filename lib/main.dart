@@ -7,6 +7,8 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+      overlays: [SystemUiOverlay.bottom]);
   runApp(const MyApp());
 }
 
@@ -18,7 +20,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         title: 'Food Optima',
         debugShowCheckedModeBanner: false,
-        theme: ApptTheme().theme(),
+        theme: AppTheme().theme(),
         home: const HomeScreen());
   }
 }
