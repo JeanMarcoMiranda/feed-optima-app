@@ -1,20 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:foodoptima/config/theme/app_theme.dart';
-import 'package:foodoptima/presentation/addFood_screen.dart';
-import 'package:foodoptima/presentation/foodList_screen.dart';
+import 'package:foodoptima/presentation/add_food_screen.dart';
+import 'package:foodoptima/presentation/food_list_screen.dart';
 import 'package:foodoptima/presentation/home_screen.dart';
-import 'package:foodoptima/presentation/previousLists-screen.dart';
+import 'package:foodoptima/presentation/previous_lists_screen.dart';
 import 'package:foodoptima/presentation/requirements_screen.dart';
 import 'package:foodoptima/presentation/restrictions_screen.dart';
 
-void main() {
-  WidgetsFlutterBinding.ensureInitialized();
+Future main() async {
+  // WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
       overlays: [SystemUiOverlay.bottom]);
+
+  FlutterNativeSplash.remove();
+
   runApp(const MyApp());
+}
+
+Future initialization(BuildContext? context) async {
+  await Future.delayed(const Duration(seconds: 20));
 }
 
 class MyApp extends StatelessWidget {
@@ -31,9 +42,9 @@ class MyApp extends StatelessWidget {
         '/home-screen': (context) => const HomeScreen(),
         '/requirements-screen': (context) => const RequirementsScreen(),
         '/restrictions-screen': (context) => const RestrictionsScreen(),
-        '/foodList-screen': (context) => const FoodListScreen(),
-        '/previousLists-screen': (context) => const PreviousListsScreen(),
-        '/addFood-scren': (context) => const AddFoodScren()
+        '/food_list_screen': (context) => const FoodListScreen(),
+        '/previous_lists_screen': (context) => const PreviousListsScreen(),
+        '/add_food_screen': (context) => const AddFoodScreen()
       },
     );
   }

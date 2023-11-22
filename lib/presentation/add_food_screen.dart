@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class AddFoodScren extends StatelessWidget {
-  const AddFoodScren({super.key});
+class AddFoodScreen extends StatelessWidget {
+  const AddFoodScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
