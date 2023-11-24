@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodoptima/widgets/requirements_list_widget.dart';
 
 class RequirementsScreen extends StatelessWidget {
   const RequirementsScreen({super.key});
@@ -6,35 +7,22 @@ class RequirementsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.white,
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          title: const Center(
+              child: Text(
+            'Requerimientos',
+            style: TextStyle(color: Colors.white),
+          )),
         ),
-        title: const Center(
-            child: Text(
-          'Requirements screen',
-          style: TextStyle(color: Colors.white),
-        )),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('Requirements Screen'),
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/restrictions-screen');
-                },
-                child: const Text('Siguiente'))
-          ],
-        ),
-      ),
-    );
+        body: const RequirementsList());
   }
 }
