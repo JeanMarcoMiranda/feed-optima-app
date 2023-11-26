@@ -28,10 +28,65 @@ class _RequirementsListState extends State<RequirementsList> {
             onChanged: (value) => setState(() => state.value = value!)),
       );
 
+  Widget RequirementItem2(RequirementItemState state) => Card(
+        child: ExpansionTile(
+          title: Row(
+            children: [
+              Checkbox(
+                  value: state.value,
+                  onChanged: (value) => setState(() => state.value = value!)),
+              Text(state.title)
+            ],
+          ),
+          children: [
+            Container(
+              width: double.infinity,
+              height: 120,
+              child: GridView.builder(
+                  itemCount: 4,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3),
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        height: 10,
+                        width: 10,
+                        child: Card(
+                          elevation: 5,
+                          color: Colors.brown[200],
+                          child: const Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'E. MATAB.',
+                                  style: TextStyle(
+                                      fontSize: 12, color: Colors.white),
+                                ),
+                                Text(
+                                  '6.0802',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 22,
+                                      color: Colors.white),
+                                )
+                              ]),
+                        ),
+                      ),
+                    );
+                  }),
+            )
+          ],
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [...requirements.map(RequirementItem)],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ListView(
+        children: [...requirements.map(RequirementItem2)],
+      ),
     );
   }
 }
