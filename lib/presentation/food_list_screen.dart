@@ -21,6 +21,16 @@ class FoodListScreen extends StatelessWidget {
           'Food List Screen',
           style: TextStyle(color: Colors.white),
         )),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/add_food_screen');
+              },
+              icon: const Icon(
+                Icons.add,
+                color: Colors.white,
+              ))
+        ],
       ),
       body: const Center(
         child: Column(

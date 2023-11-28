@@ -24,7 +24,7 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/previousLists-screen');
+                Navigator.pushNamed(context, '/previous_lists_screen');
               },
               icon: const Icon(
                 Icons.list_alt_outlined,

@@ -1,11 +1,12 @@
 flutter_native_splash:
-  # image: assets/splash.png
-  background_image: assets/farm.png
+  color: "#ffffff"
+  image: assets/logo-1.png
+  # background_image: assets/farm.png
 
   android_12:
-    image: assets/farm_icon.png
+    image: assets/logo.png
     color: "#ffffff"
-    icon_background_color: "#111111"
-    image_dark: assets/farm_icon.png
+    # icon_background_color: "#111111"
+    image_dark: assets/logo-1-dark.png
     color_dark: "#042a49"
-    icon_background_color_dark: "#eeeeee"
+    # icon_background_color_dark: "#eeeeee"

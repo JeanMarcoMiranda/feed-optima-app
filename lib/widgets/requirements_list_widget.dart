@@ -39,7 +39,7 @@ class _RequirementsListState extends State<RequirementsList> {
             ],
           ),
           children: [
-            Container(
+            SizedBox(
               width: double.infinity,
               height: 120,
               child: GridView.builder(
@@ -49,7 +49,7 @@ class _RequirementsListState extends State<RequirementsList> {
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Container(
+                      child: SizedBox(
                         height: 10,
                         width: 10,
                         child: Card(
@@ -82,11 +82,32 @@ class _RequirementsListState extends State<RequirementsList> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ListView(
-        children: [...requirements.map(RequirementItem2)],
-      ),
+    return Column(
+      children: [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ListView(
+              children: [...requirements.map(RequirementItem2)],
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 7.0, right: 15.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  // Redirigir a la pantalla siguiente
+                  Navigator.pushNamed(context, '/food_list_screen');
+                },
+                child: const Text('Siguiente'),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
