@@ -52,14 +52,36 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
     TextInputType? keyboardType,
     required Function(String?) onChanged,
   }) {
-    return TextFormField(
-      decoration: InputDecoration(
-        labelText: labelText,
-        hintText: hintText,
-      ),
-      keyboardType: keyboardType,
-      onSaved: onSaved,
-      onChanged: onChanged,
+    return Column(
+      children: [
+        TextFormField(
+          decoration: InputDecoration(
+            labelText: labelText,
+            hintText: hintText,
+            hintStyle: const TextStyle(
+              color: Colors.black26,
+            ),
+            border: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.black12),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.black12),
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          keyboardType: keyboardType,
+          onSaved: onSaved,
+          onChanged: onChanged,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "Introduzca un valor";
+            }
+            return null;
+          },
+        ),
+        const SizedBox(height: 20),
+      ],
     );
   }
 
@@ -84,7 +106,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
           child: Form(
             key: _formKey,
             child: Column(
@@ -175,11 +197,14 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                   onChanged: (text) => _vitaminD = double.parse(text!),
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 ElevatedButton(
                   onPressed: _handleFormSubmit,
                   child: const Text('Agregar Alimento'),
+                ),
+                const SizedBox(
+                  height: 5,
                 ),
               ],
             ),
