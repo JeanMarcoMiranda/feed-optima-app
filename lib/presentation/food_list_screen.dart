@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodoptima/models/foood_state.dart';
+import 'package:foodoptima/widgets/food_data_table.dart';
 
 class FoodListScreen extends StatefulWidget {
   const FoodListScreen({super.key});
@@ -53,12 +54,30 @@ class _TablaScreenState extends State<FoodListScreen> {
               ))
         ],
       ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: DataTable(
-          columns: getColumns(columns),
-          rows: getRows(alimentos),
-        ),
+      body: Center(
+        child: ListView(padding: const EdgeInsets.all(0.0), children: [
+          PaginatedDataTable(
+            columns: getColumns(columns),
+            rowsPerPage: 12,
+            source: AlimentosDataSource(alimentos, selectedAlimentos),
+            header: const Text("Alimentos"),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: () {
+                  setState(() {
+                    selectedAlimentos.clear();
+                  });
+                },
+              ),
+            ],
+          ),
+        ]
+            // child: DataTable(
+            //   columns: getColumns(columns),
+            //   rows: getRows(alimentos),
+            // ),
+            ),
       ),
     );
   }
@@ -66,6 +85,7 @@ class _TablaScreenState extends State<FoodListScreen> {
   List<DataColumn> getColumns(List<String> columns) =>
       columns.map((String column) => DataColumn(label: Text(column))).toList();
 
+  //without use
   List<DataRow> getRows(List<Alimento> alimentos) =>
       alimentos.map((Alimento alimento) {
         final cells = [
@@ -89,6 +109,7 @@ class _TablaScreenState extends State<FoodListScreen> {
         );
       }).toList();
 
+  //without use
   List<DataCell> getCells(List<dynamic> cells) =>
       cells.map((data) => DataCell(Text('$data'))).toList();
 }
