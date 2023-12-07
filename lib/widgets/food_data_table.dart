@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:foodoptima/models/foood_state.dart';
+import 'package:foodoptima/models/food_state.dart';
 
 class AlimentosDataSource extends DataTableSource {
   final List<Alimento> _alimentos;

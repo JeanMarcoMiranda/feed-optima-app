@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:foodoptima/models/foood_state.dart';
+import 'package:foodoptima/models/food_state.dart';
+import 'package:foodoptima/widgets/food_data_search.dart';
 import 'package:foodoptima/widgets/food_data_table.dart';
 
 class FoodListScreen extends StatefulWidget {
@@ -44,6 +45,21 @@ class _TablaScreenState extends State<FoodListScreen> {
           style: TextStyle(color: Colors.white),
         )),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            color: Colors.white,
+            onPressed: () async {
+              final Alimento? result = await showSearch<Alimento>(
+                context: context,
+                delegate: DataSearch(alimentos),
+              );
+              if (result != null) {
+                setState(() {
+                  selectedAlimentos.add(result);
+                });
+              }
+            },
+          ),
           IconButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/add_food_screen');
