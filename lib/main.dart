@@ -16,8 +16,8 @@ Future main() async {
 
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-      overlays: [SystemUiOverlay.bottom]);
+  //SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+  //overlays: [SystemUiOverlay.bottom]);
 
   FlutterNativeSplash.remove();
 

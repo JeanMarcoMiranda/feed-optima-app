@@ -7,7 +7,6 @@ class RequirementsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.green[400],
         appBar: AppBar(
           leading: IconButton(
             icon: const Icon(
@@ -18,11 +17,12 @@ class RequirementsScreen extends StatelessWidget {
               Navigator.pop(context);
             },
           ),
-          title: const Center(
-              child: Text(
+          title: const Text(
             'Requerimientos',
-            style: TextStyle(color: Colors.white),
-          )),
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
         ),
         body: const RequirementsList());
   }
