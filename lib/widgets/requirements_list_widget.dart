@@ -99,7 +99,6 @@ class _RequirementsListState extends State<RequirementsList> {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  // Redirigir a la pantalla siguiente
                   Navigator.pushNamed(context, '/food_list_screen');
                 },
                 child: const Text('Siguiente'),

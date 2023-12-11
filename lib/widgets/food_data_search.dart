@@ -23,7 +23,7 @@ class DataSearch extends SearchDelegate<Alimento> {
     return IconButton(
       icon: const Icon(Icons.arrow_back),
       onPressed: () {
-        close(context, [] as Alimento);
+        Navigator.pop(context); // Cierra usando Navigator.pop()
       },
     );
   }

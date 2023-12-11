@@ -38,7 +38,7 @@ class HomeScreen extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, '/requirements-screen');
+                Navigator.pushNamed(context, '/requirements_screen');
               },
               child: const CardWidget(
                 cardText: "Toro",

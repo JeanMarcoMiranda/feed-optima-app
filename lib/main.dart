@@ -39,9 +39,9 @@ class MyApp extends StatelessWidget {
       theme: AppTheme().theme(),
       home: const HomeScreen(),
       routes: {
-        '/home-screen': (context) => const HomeScreen(),
-        '/requirements-screen': (context) => const RequirementsScreen(),
-        '/restrictions-screen': (context) => const RestrictionsScreen(),
+        '/home_screen': (context) => const HomeScreen(),
+        '/requirements_screen': (context) => const RequirementsScreen(),
+        '/restrictions_screen': (context) => const RestrictionsScreen(),
         '/food_list_screen': (context) => const FoodListScreen(),
         '/previous_lists_screen': (context) => const PreviousListsScreen(),
         '/add_food_screen': (context) => const AddFoodScreen()
