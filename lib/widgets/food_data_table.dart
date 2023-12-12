@@ -8,27 +8,35 @@ class AlimentosDataSource extends DataTableSource {
   AlimentosDataSource(this._alimentos, this._selectedAlimentos);
 
   @override
-  DataRow getRow(int index) {
-    final alimento = _alimentos[index];
-    return DataRow.byIndex(
-      index: index,
-      selected: _selectedAlimentos.contains(alimento),
-      onSelectChanged: (selected) {
-        if (selected != null && selected) {
-          _selectedAlimentos.add(alimento);
-        } else {
-          _selectedAlimentos.remove(alimento);
-        }
-        notifyListeners();
-      },
-      cells: [
-        DataCell(Text(alimento.nombre)),
-        DataCell(Text(alimento.materiaSeca)),
-        DataCell(Text(alimento.proteinasTotal)),
-        DataCell(Text(alimento.energiaMetabolizable)),
-      ],
-    );
+  DataRow? getRow(int index) {
+    if (index < _alimentos.length) {
+      final alimento = _alimentos[index];
+      final cells = [
+        alimento.nombre,
+        alimento.materiaSeca,
+        alimento.proteinasTotal,
+        alimento.energiaMetabolizable
+      ];
+      return DataRow.byIndex(
+        index: index,
+        selected: _selectedAlimentos.contains(alimento),
+        onSelectChanged: (bool? selected) {
+          if (selected != null && selected) {
+            _selectedAlimentos.add(alimento);
+          } else {
+            _selectedAlimentos.remove(alimento);
+          }
+          notifyListeners();
+        },
+        cells: getCells(cells),
+      );
+    } else {
+      return null;
+    }
   }
+
+  List<DataCell> getCells(List<dynamic> cells) =>
+      cells.map((data) => DataCell(Text('$data'))).toList();
 
   @override
   bool get isRowCountApproximate => false;

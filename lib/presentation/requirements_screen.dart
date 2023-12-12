@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodoptima/models/requirement_state.dart';
 import 'package:foodoptima/widgets/requirements_data_table.dart';
 
+// ignore: must_be_immutable
 class RequirementsScreen extends StatelessWidget {
   final String requirementsFor;
 
@@ -148,21 +149,32 @@ class RequirementsScreen extends StatelessWidget {
                   requerimientosToros, selectedRequirements)),
         ],
       ),
-      bottomNavigationBar: BottomAppBar(
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text("Anterior")),
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, "/food_list_screen");
-                  },
-                  child: const Text("Siguiente")),
-            ]),
+      bottomNavigationBar: BottomNavigationBar(
+        unselectedItemColor: Colors.black45,
+        selectedItemColor: Colors.black45,
+        selectedFontSize: 12.0,
+        unselectedFontSize: 12.0,
+        type: BottomNavigationBarType.fixed,
+        items: const [
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.arrow_back,
+              ),
+              label: "Regresar"),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.arrow_forward,
+            ),
+            label: "Siguiente",
+          ),
+        ],
+        onTap: (index) {
+          if (index == 0) {
+            Navigator.pop(context);
+          } else if (index == 1) {
+            Navigator.pushNamed(context, '/food_list_screen');
+          }
+        },
       ),
     );
   }

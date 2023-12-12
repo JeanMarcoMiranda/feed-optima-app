@@ -29,7 +29,7 @@ class RestrictionsScreen extends StatelessWidget {
             const Text('Restrictions Screen'),
             ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/foodList-screen');
+                  Navigator.pushNamed(context, '/food_list_screen');
                 },
                 child: const Text('Siguiente'))
           ],

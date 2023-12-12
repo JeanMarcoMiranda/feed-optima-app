@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
               requirementsFor:
                   ModalRoute.of(context)!.settings.arguments as String,
             ),
-        '/restrictions-screen': (context) => const RestrictionsScreen(),
+        '/restrictions_screen': (context) => const RestrictionsScreen(),
         '/food_list_screen': (context) => const FoodListScreen(),
         '/previous_lists_screen': (context) => const PreviousListsScreen(),
         '/add_food_screen': (context) => const AddFoodScreen()
