@@ -38,7 +38,8 @@ class HomeScreen extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, '/requirements-screen');
+                Navigator.pushNamed(context, '/requirements-screen',
+                    arguments: 'bull');
               },
               child: const CardWidget(
                 cardText: "Toro",
@@ -47,11 +48,17 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 30),
-            const CardWidget(
-              cardText: "Vaca",
-              imgURL:
-                  "https://taxonomiaanimal.files.wordpress.com/2018/03/vaca.png",
-            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, '/requirements-screen',
+                    arguments: 'cow');
+              },
+              child: const CardWidget(
+                cardText: "Vaca",
+                imgURL:
+                    "https://taxonomiaanimal.files.wordpress.com/2018/03/vaca.png",
+              ),
+            )
           ],
         ),
       ),

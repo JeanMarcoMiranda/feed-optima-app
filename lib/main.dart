@@ -37,15 +37,18 @@ class MyApp extends StatelessWidget {
       title: 'Food Optima',
       debugShowCheckedModeBanner: false,
       theme: AppTheme().theme(),
-      home: const HomeScreen(),
       routes: {
         '/home-screen': (context) => const HomeScreen(),
-        '/requirements-screen': (context) => const RequirementsScreen(),
+        '/requirements-screen': (context) => RequirementsScreen(
+              requirementsFor:
+                  ModalRoute.of(context)!.settings.arguments as String,
+            ),
         '/restrictions-screen': (context) => const RestrictionsScreen(),
         '/food_list_screen': (context) => const FoodListScreen(),
         '/previous_lists_screen': (context) => const PreviousListsScreen(),
         '/add_food_screen': (context) => const AddFoodScreen()
       },
+      home: const HomeScreen(),
     );
   }
 }

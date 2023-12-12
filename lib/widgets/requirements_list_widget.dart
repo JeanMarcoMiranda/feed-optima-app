@@ -82,32 +82,13 @@ class _RequirementsListState extends State<RequirementsList> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ListView(
-              children: [...requirements.map(RequirementItem2)],
-            ),
-          ),
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView(
+          children: [...requirements.map(RequirementItem2)],
         ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 7.0, right: 15.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  // Redirigir a la pantalla siguiente
-                  Navigator.pushNamed(context, '/food_list_screen');
-                },
-                child: const Text('Siguiente'),
-              ),
-            ],
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
