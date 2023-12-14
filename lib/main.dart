@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'routes.dart';
 import 'package:foodoptima/config/theme/app_theme.dart';
-import 'package:foodoptima/presentation/add_food_screen.dart';
-import 'package:foodoptima/presentation/food_list_screen.dart';
-import 'package:foodoptima/presentation/home_screen.dart';
-import 'package:foodoptima/presentation/previous_lists_screen.dart';
-import 'package:foodoptima/presentation/requirements_screen.dart';
-import 'package:foodoptima/presentation/restrictions_screen.dart';
 
 Future main() async {
   // WidgetsFlutterBinding.ensureInitialized();
@@ -33,22 +28,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Food Optima',
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       theme: AppTheme().theme(),
-      routes: {
-        '/home-screen': (context) => const HomeScreen(),
-        '/requirements-screen': (context) => RequirementsScreen(
-              requirementsFor:
-                  ModalRoute.of(context)!.settings.arguments as String,
-            ),
-        '/restrictions_screen': (context) => const RestrictionsScreen(),
-        '/food_list_screen': (context) => const FoodListScreen(),
-        '/previous_lists_screen': (context) => const PreviousListsScreen(),
-        '/add_food_screen': (context) => const AddFoodScreen()
-      },
-      home: const HomeScreen(),
+      title: 'Food Optima',
+      routerConfig: router,
     );
   }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:foodoptima/models/route_names.dart';
 import 'package:foodoptima/widgets/card_widget.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -24,7 +26,7 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/previous_lists_screen');
+                context.goNamed(RouteNames.previousLists);
               },
               icon: const Icon(
                 Icons.list_alt_outlined,
@@ -38,8 +40,8 @@ class HomeScreen extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, '/requirements-screen',
-                    arguments: 'bull');
+                context.goNamed(RouteNames.requirements,
+                    queryParameters: {'for': 'bulls'});
               },
               child: const CardWidget(
                 cardText: "Toro",
@@ -50,8 +52,8 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 30),
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, '/requirements-screen',
-                    arguments: 'cow');
+                context.goNamed(RouteNames.requirements,
+                    queryParameters: {'for': 'cows'});
               },
               child: const CardWidget(
                 cardText: "Vaca",

@@ -12,28 +12,7 @@ class RequerimientosDataSource<T> extends DataTableSource {
   DataRow getRow(int index) {
     final requerimiento = _requerimientos[index];
 
-    if (requerimiento is RequerimientosVacas) {
-      return DataRow.byIndex(
-          index: index,
-          selected: _selectedRequerimientos.contains(requerimiento),
-          onSelectChanged: (selected) {
-            if (selected != null && selected) {
-              _selectedRequerimientos.add(requerimiento);
-            } else {
-              _selectedRequerimientos.remove(requerimiento);
-            }
-            notifyListeners();
-          },
-          cells: [
-            DataCell(Text(requerimiento.pesoVivo)),
-            DataCell(Text(requerimiento.eMetab)),
-            DataCell(Text(requerimiento.vitA)),
-            DataCell(Text(requerimiento.vitD)),
-            DataCell(Text(requerimiento.ca)),
-            DataCell(Text(requerimiento.p)),
-            DataCell(Text(requerimiento.fibra)),
-          ]);
-    } else if (requerimiento is RequerimientosToros) {
+    if (requerimiento is RequerimientosToros) {
       return DataRow.byIndex(
           index: index,
           selected: _selectedRequerimientos.contains(requerimiento),
@@ -57,6 +36,27 @@ class RequerimientosDataSource<T> extends DataTableSource {
             DataCell(Text(requerimiento.ms)),
             DataCell(Text(requerimiento.n.toString())),
             DataCell(Text(requerimiento.raza)),
+          ]);
+    } else if (requerimiento is RequerimientosVacas) {
+      return DataRow.byIndex(
+          index: index,
+          selected: _selectedRequerimientos.contains(requerimiento),
+          onSelectChanged: (selected) {
+            if (selected != null && selected) {
+              _selectedRequerimientos.add(requerimiento);
+            } else {
+              _selectedRequerimientos.remove(requerimiento);
+            }
+            notifyListeners();
+          },
+          cells: [
+            DataCell(Text(requerimiento.pesoVivo)),
+            DataCell(Text(requerimiento.eMetab)),
+            DataCell(Text(requerimiento.vitA)),
+            DataCell(Text(requerimiento.vitD)),
+            DataCell(Text(requerimiento.ca)),
+            DataCell(Text(requerimiento.p)),
+            DataCell(Text(requerimiento.fibra)),
           ]);
     } else {
       throw Exception('Unexpected data type encountered');

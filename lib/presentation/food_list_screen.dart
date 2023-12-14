@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:foodoptima/models/food_state.dart';
+import 'package:foodoptima/models/route_names.dart';
 import 'package:foodoptima/widgets/food_data_search.dart';
 import 'package:foodoptima/widgets/food_data_table.dart';
+import 'package:go_router/go_router.dart';
 
 class FoodListScreen extends StatefulWidget {
   const FoodListScreen({super.key});
@@ -63,7 +65,7 @@ class _TablaScreenState extends State<FoodListScreen> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/add_food_screen');
+                context.goNamed(RouteNames.addFood);
               },
               icon: const Icon(
                 Icons.add,
@@ -125,7 +127,7 @@ class _TablaScreenState extends State<FoodListScreen> {
           if (index == 0) {
             Navigator.pop(context);
           } else if (index == 1) {
-            Navigator.pushNamed(context, '/restrictions_screen');
+            context.goNamed(RouteNames.restrictions);
           }
         },
       ),

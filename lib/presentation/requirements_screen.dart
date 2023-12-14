@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:foodoptima/models/requirement_state.dart';
+import 'package:foodoptima/models/route_names.dart';
 import 'package:foodoptima/widgets/requirements_data_table.dart';
+import 'package:go_router/go_router.dart';
 
 // ignore: must_be_immutable
 class RequirementsScreen extends StatelessWidget {
@@ -117,7 +119,7 @@ class RequirementsScreen extends StatelessWidget {
         raza: 'Criollo'),
   ];
 
-  final selectedRequirements = <RequerimientosToros>[];
+  final selectedRequirements = [];
 
   @override
   Widget build(BuildContext context) {
@@ -142,11 +144,16 @@ class RequirementsScreen extends StatelessWidget {
       body: ListView(
         children: [
           PaginatedDataTable(
-              columns: getColumns(cowsColumns),
+              columns: getColumns(
+                  requirementsFor == 'bulls' ? bullsColumns : cowsColumns),
               rowsPerPage: 12,
-              header: const Text('Requerimientos'),
-              source: RequerimientosDataSource<RequerimientosToros>(
-                  requerimientosToros, selectedRequirements)),
+              header: Text(
+                  "Requerimientos en ${requirementsFor == 'bulls' ? 'Toros' : 'Vacas'}"),
+              source: RequerimientosDataSource(
+                  requirementsFor == 'bulls'
+                      ? requerimientosToros
+                      : requerimientosVacas,
+                  selectedRequirements)),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -172,7 +179,7 @@ class RequirementsScreen extends StatelessWidget {
           if (index == 0) {
             Navigator.pop(context);
           } else if (index == 1) {
-            Navigator.pushNamed(context, '/food_list_screen');
+            context.goNamed(RouteNames.foodList);
           }
         },
       ),
