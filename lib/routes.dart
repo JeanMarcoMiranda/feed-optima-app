@@ -5,6 +5,7 @@ import 'package:foodoptima/presentation/home_screen.dart';
 import 'package:foodoptima/presentation/previous_lists_screen.dart';
 import 'package:foodoptima/presentation/requirements_screen.dart';
 import 'package:foodoptima/presentation/restrictions_screen.dart';
+import 'package:foodoptima/presentation/summary_food_list.dart';
 import 'package:go_router/go_router.dart';
 
 final GoRouter router = GoRouter(routes: [
@@ -39,6 +40,21 @@ final GoRouter router = GoRouter(routes: [
           name: RouteNames.previousLists,
           path: 'previousLists',
           builder: (context, state) => const PreviousListsScreen(),
+        ),
+        GoRoute(
+          name: RouteNames.summaryFood,
+          path: 'summaryFood',
+          builder: (context, state) => SummaryFoodScreen(alimentos: [
+            Alimento(
+                nombre: 'Arroz', cantidad: 1.0, costo: 1.2, costoUnitario: 1.2),
+            Alimento(
+                nombre: 'Lentejas',
+                cantidad: 1.0,
+                costo: 1.5,
+                costoUnitario: 1.5),
+            Alimento(
+                nombre: 'Papas', cantidad: 1.0, costo: 0.8, costoUnitario: 0.8),
+          ], cantidadTotal: 5.0),
         ),
       ])
 ]);

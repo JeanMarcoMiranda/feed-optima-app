@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:foodoptima/models/route_names.dart';
+import 'package:go_router/go_router.dart';
 
 class RestrictionsScreen extends StatelessWidget {
   const RestrictionsScreen({super.key});
@@ -29,7 +31,7 @@ class RestrictionsScreen extends StatelessWidget {
             const Text('Restrictions Screen'),
             ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/food_list_screen');
+                  context.goNamed(RouteNames.summaryFood);
                 },
                 child: const Text('Siguiente'))
           ],

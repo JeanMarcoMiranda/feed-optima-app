@@ -5,4 +5,5 @@ class RouteNames {
   static const previousLists = "previousLists";
   static const foodList = "foodList";
   static const addFood = "addFood";
+  static const summaryFood = "summaryFood";
 }
