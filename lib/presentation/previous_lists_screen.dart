@@ -57,18 +57,18 @@ class _PreviousListsScreenState extends State<PreviousListsScreen> {
             ),
             Expanded(
               child: ListView(
-                children: [..._prevLists.map(ListItem)],
+                children: [..._prevLists.map(listItem)],
               ),
             )
           ]),
         )));
   }
 
-  Widget ListItem(PreviousListItemState state) => Card(
+  Widget listItem(PreviousListItemState state) => Card(
         child: ListTile(
           title: Text(
             state.nombre,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
           ),
           subtitle: Text("${state.tipo} - ${state.fecha}"),
           onTap: () {},
