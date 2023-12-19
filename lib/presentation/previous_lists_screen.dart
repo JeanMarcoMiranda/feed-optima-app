@@ -15,9 +15,7 @@ class _PreviousListsScreenState extends State<PreviousListsScreen> {
     PreviousListItemState(
         fecha: "10/20/24", nombre: "Lista de invierno", tipo: "Lista de vacas"),
     PreviousListItemState(
-        fecha: "10/20/24",
-        nombre: "Lista de oto;;;;;;o",
-        tipo: "Lista de vacas"),
+        fecha: "10/20/24", nombre: "Lista de otoño", tipo: "Lista de vacas"),
   ];
 
   @override

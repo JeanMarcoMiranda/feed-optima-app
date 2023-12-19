@@ -1,4 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:external_path/external_path.dart';
 
 class Alimento {
   final String nombre;
@@ -29,6 +35,8 @@ class SummaryFoodScreen extends StatefulWidget {
 }
 
 class _SummaryFoodState extends State<SummaryFoodScreen> {
+  double _cantidadTotal = 0;
+  double _costeTotal = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,6 +56,70 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
       ),
       body: Column(
         children: [
+          const SizedBox(
+            height: 25,
+          ),
+          const Text(
+            'Guardar en:',
+            style: TextStyle(fontSize: 18),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  // Guardar en PDF
+                  final nameFileController = TextEditingController();
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Nombre del archivo'),
+                        content: TextField(
+                          controller: nameFileController,
+                          decoration: const InputDecoration(
+                            labelText: 'Ingrese el nombre del archivo',
+                          ),
+                        ),
+                        actions: [
+                          TextButton(
+                            child: const Text('Guardar'),
+                            onPressed: () {
+                              // Guarda el documento PDF con el nombre especificado por el usuario
+                              guardarEnPDF(nameFileController.text);
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                          'El documento PDF se guardó correctamente en la carpeta descarga'),
+                    ),
+                  );
+                },
+                child: const Text('PDF'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  // Guardar en Excel
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Próximamente...'),
+                    ),
+                  );
+                },
+                child: const Text('Excel'),
+              ),
+            ],
+          ),
           Container(
             // padding: const EdgeInsets.all(15),
             padding: const EdgeInsets.fromLTRB(15, 30, 15, 15),
@@ -76,55 +148,66 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
                     _actualizarLista(double.parse(value));
                   });
                 }
-                // if (value.isNotEmpty) {
-                //   setState(() {
-                //     _actualizarLista(double.parse(value));
-                //   });
-                // }
               },
             ),
           ),
           Expanded(
-            child: ListView.builder(
+            child: ListView.separated(
               itemCount: widget.alimentos.length,
               itemBuilder: (context, index) {
                 final alimento = widget.alimentos[index];
                 return ListTile(
-                  title: Text(alimento.nombre),
-                  subtitle: Text('${alimento.cantidad} kg'),
-                  trailing: Text('S/.${alimento.costo}'),
+                  title: Text(
+                    alimento.nombre,
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                  subtitle: Text(
+                    'Cantidad: ${alimento.cantidad} kg',
+                    style: const TextStyle(fontSize: 15),
+                  ),
+                  trailing: Text(
+                    'Costo: S/.${alimento.costo}',
+                    style: const TextStyle(fontSize: 14),
+                  ),
                 );
               },
+              separatorBuilder: (context, index) =>
+                  const Divider(color: Colors.grey, thickness: 1),
             ),
           ),
           Container(
-            padding: const EdgeInsets.fromLTRB(15, 15, 15, 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  'Cantidad total: ',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  '$_cantidadTotal kg',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ],
+            width: double.infinity,
+            height: 60,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.black,
+                width: 1,
+              ),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(5),
+                topRight: Radius.circular(5),
+              ),
             ),
-          ),
-          Container(
-            padding: const EdgeInsets.fromLTRB(15, 15, 15, 30),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+                Text(
+                  'Cantidad total: $_cantidadTotal kg',
+                  style: const TextStyle(
+                    fontSize: 15,
+                  ),
+                ),
                 const Text(
-                  'Coste total: ',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  ' | ',
+                  style: TextStyle(
+                    fontSize: 15,
+                  ),
                 ),
                 Text(
-                  '$_costeTotal \$',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  'Coste total: S/.$_costeTotal',
+                  style: const TextStyle(
+                    fontSize: 15,
+                  ),
                 ),
               ],
             ),
@@ -164,6 +247,89 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
     _costeTotal = double.parse(_costeTotal.toStringAsFixed(2));
   }
 
-  double _cantidadTotal = 0;
-  double _costeTotal = 0;
+  Future<void> guardarEnPDF(String name) async {
+    // Crea un documento PDF
+    final pdf = pw.Document(version: PdfVersion.pdf_1_5, compress: true);
+    final creationDate = DateTime.now();
+    final formattedCreationDate = DateFormat('dd/MM/yyyy').format(creationDate);
+    final currentTime = DateFormat('HH-mm dd-MM-yyyy').format(creationDate);
+
+    // Agrega el título al documento
+    pdf.addPage(
+      pw.Page(
+        pageFormat: PdfPageFormat.a4,
+        build: (pw.Context context) {
+          return pw.Center(
+            child: pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.center,
+              mainAxisAlignment: pw.MainAxisAlignment.center,
+              children: [
+                pw.Text(
+                  'Lista de alimentos',
+                  style: const pw.TextStyle(fontSize: 30),
+                ),
+                pw.SizedBox(
+                  height: 10,
+                ),
+                pw.Text(
+                  formattedCreationDate,
+                  style: const pw.TextStyle(fontSize: 12),
+                ),
+                pw.SizedBox(
+                  height: 10,
+                ),
+                pw.Text(
+                  'Esta lista de alimentos es solo una guía. Es importante consultar con un profesional de la salud para obtener recomendaciones específicas para sus necesidades individuales.',
+                  style: const pw.TextStyle(fontSize: 12),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+
+    pdf.addPage(pw.Page(
+        pageFormat: PdfPageFormat.a4,
+        build: (context) {
+          return pw.Table(border: pw.TableBorder.all(), children: [
+            pw.TableRow(children: [
+              pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.center,
+                  mainAxisAlignment: pw.MainAxisAlignment.center,
+                  children: [pw.Text("ALIMENTO")]),
+              pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.center,
+                  mainAxisAlignment: pw.MainAxisAlignment.center,
+                  children: [pw.Text("CANTIDAD")]),
+              pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.center,
+                  mainAxisAlignment: pw.MainAxisAlignment.center,
+                  children: [pw.Text("COSTO")]),
+            ]),
+            for (final alimento in widget.alimentos)
+              pw.TableRow(children: [
+                pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.center,
+                    mainAxisAlignment: pw.MainAxisAlignment.center,
+                    children: [pw.Text(alimento.nombre)]),
+                pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.center,
+                    mainAxisAlignment: pw.MainAxisAlignment.center,
+                    children: [pw.Text("${alimento.cantidad.toString()} kg")]),
+                pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.center,
+                    mainAxisAlignment: pw.MainAxisAlignment.center,
+                    children: [pw.Text("S/. ${alimento.costo.toString()}")]),
+              ]),
+          ]);
+        }));
+
+    final output = await ExternalPath.getExternalStoragePublicDirectory(
+        ExternalPath.DIRECTORY_DOWNLOADS);
+    final file = File('$output/$name $currentTime.pdf');
+    if (!await file.exists()) {
+      await file.writeAsBytes(await pdf.save());
+    }
+  }
 }

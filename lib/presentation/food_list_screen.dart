@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 class FoodListScreen extends StatefulWidget {
   const FoodListScreen({super.key});
   @override
+  // ignore: library_private_types_in_public_api
   _TablaScreenState createState() => _TablaScreenState();
 }
 
