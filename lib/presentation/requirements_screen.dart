@@ -177,9 +177,9 @@ class RequirementsScreen extends StatelessWidget {
         ],
         onTap: (index) {
           if (index == 0) {
-            Navigator.pop(context);
+            context.pop();
           } else if (index == 1) {
-            context.goNamed(RouteNames.foodList);
+            context.pushNamed(RouteNames.foodList);
           }
         },
       ),

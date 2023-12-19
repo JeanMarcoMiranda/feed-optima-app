@@ -26,7 +26,7 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: () {
-                context.goNamed(RouteNames.previousLists);
+                context.pushNamed(RouteNames.previousLists);
               },
               icon: const Icon(
                 Icons.list_alt_outlined,
@@ -40,7 +40,7 @@ class HomeScreen extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                context.goNamed(RouteNames.requirements,
+                context.pushNamed(RouteNames.requirements,
                     queryParameters: {'for': 'bulls'});
               },
               child: const CardWidget(
@@ -52,7 +52,7 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 30),
             GestureDetector(
               onTap: () {
-                context.goNamed(RouteNames.requirements,
+                context.pushNamed(RouteNames.requirements,
                     queryParameters: {'for': 'cows'});
               },
               child: const CardWidget(
