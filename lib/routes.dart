@@ -1,11 +1,11 @@
-import 'package:foodoptima/models/route_names.dart';
-import 'package:foodoptima/presentation/add_food_screen.dart';
-import 'package:foodoptima/presentation/food_list_screen.dart';
-import 'package:foodoptima/presentation/home_screen.dart';
-import 'package:foodoptima/presentation/previous_lists_screen.dart';
-import 'package:foodoptima/presentation/requirements_screen.dart';
-import 'package:foodoptima/presentation/restrictions_screen.dart';
-import 'package:foodoptima/presentation/summary_food_list.dart';
+import 'package:foodoptima/application/routes/app_router.dart';
+import 'package:foodoptima/features/add_food_screen.dart';
+import 'package:foodoptima/features/food_list_screen.dart';
+import 'package:foodoptima/features/home_screen.dart';
+import 'package:foodoptima/features/previous_lists_screen.dart';
+import 'package:foodoptima/features/requirements_screen.dart';
+import 'package:foodoptima/features/restrictions_screen.dart';
+import 'package:foodoptima/features/summary_food_list.dart';
 import 'package:go_router/go_router.dart';
 
 final GoRouter router = GoRouter(routes: [

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:foodoptima/models/food_state.dart';
+import 'package:foodoptima/models/food_model.dart';
 
 class AlimentosDataSource extends DataTableSource {
-  final List<Alimento> _alimentos;
-  final List<Alimento> _selectedAlimentos;
+  final List<FoodModel> _alimentos;
+  final List<FoodModel> _selectedAlimentos;
 
   AlimentosDataSource(this._alimentos, this._selectedAlimentos);
 
@@ -13,9 +13,9 @@ class AlimentosDataSource extends DataTableSource {
       final alimento = _alimentos[index];
       final cells = [
         alimento.nombre,
-        alimento.materiaSeca,
-        alimento.proteinasTotal,
-        alimento.energiaMetabolizable
+        alimento.materia_seca,
+        alimento.proteina_total,
+        alimento.energia_metab
       ];
       return DataRow.byIndex(
         index: index,

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:foodoptima/db/database_helper.dart';
+import 'package:foodoptima/application/theme/app_theme.dart';
 import 'routes.dart';
-import 'package:foodoptima/config/theme/app_theme.dart';
 
 Future main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
+  await DatabaseHelper.instance.database;
+
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 

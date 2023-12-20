@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:foodoptima/models/route_names.dart';
+import 'package:foodoptima/application/routes/app_router.dart';
 import 'package:foodoptima/widgets/card_widget.dart';
 import 'package:go_router/go_router.dart';
 

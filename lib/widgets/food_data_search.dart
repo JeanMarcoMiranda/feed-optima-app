@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:foodoptima/models/food_state.dart';
+import 'package:foodoptima/models/food_model.dart';
 
-class DataSearch extends SearchDelegate<Alimento> {
-  final List<Alimento> alimentos;
+class DataSearch extends SearchDelegate<FoodModel> {
+  final List<FoodModel> alimentos;
 
   DataSearch(this.alimentos);
 

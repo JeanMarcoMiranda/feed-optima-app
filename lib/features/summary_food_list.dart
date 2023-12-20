@@ -92,17 +92,17 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
                               // Guarda el documento PDF con el nombre especificado por el usuario
                               guardarEnPDF(nameFileController.text);
                               Navigator.pop(context);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      'El documento PDF se guardó correctamente en la carpeta descarga'),
+                                ),
+                              );
                             },
                           ),
                         ],
                       );
                     },
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                          'El documento PDF se guardó correctamente en la carpeta descarga'),
-                    ),
                   );
                 },
                 child: const Text('PDF'),
@@ -322,6 +322,20 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
                     mainAxisAlignment: pw.MainAxisAlignment.center,
                     children: [pw.Text("S/. ${alimento.costo.toString()}")]),
               ]),
+            pw.TableRow(children: [
+              pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.center,
+                  mainAxisAlignment: pw.MainAxisAlignment.center,
+                  children: [pw.Text("TOTAL")]),
+              pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.center,
+                  mainAxisAlignment: pw.MainAxisAlignment.center,
+                  children: [pw.Text("$_cantidadTotal kg")]),
+              pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.center,
+                  mainAxisAlignment: pw.MainAxisAlignment.center,
+                  children: [pw.Text("S/. $_costeTotal")]),
+            ]),
           ]);
         }));
 
