@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:foodoptima/db/dao/food_dao.dart';
+import 'package:foodoptima/models/food_model.dart';
 
 class AddFoodScreen extends StatefulWidget {
   const AddFoodScreen({super.key});
@@ -24,8 +26,44 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
   double _vitaminA = 0;
   double _vitaminD = 0;
 
-  void _handleFormSubmit() {
+  Future<void> _handleFormSubmit() async {
     if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save(); // Save form values to fields
+      // Create a FoodModel instance
+      final food = FoodModel(
+        nombre: _foodName,
+        materia_seca: _dryMatter,
+        proteina_total: _crudeProtein,
+        energia_neta_g: _netEnergyGMcalKg,
+        energia_metab: _metabolicEnergyMcalKg,
+        ndt: _ndt,
+        calcio: _calcium,
+        fosforo: _phosphorus,
+        fibra_cruda: _crudeFiber,
+        fdn: _fdn,
+        vit_a: _vitaminA,
+        vit_d: _vitaminD,
+      );
+
+      // Insert the food into the database
+      final foodDao = FoodDao();
+      try {
+        final id = await foodDao.insert(food);
+        print('Food inserted with ID: $id');
+
+        // Handle successful insertion (e.g., show a success message)
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Alimento agregado exitosamente!')),
+        );
+        Navigator.pop(context); // Navigate back to previous screen
+      } catch (error) {
+        // Handle database errors
+        print('Error inserting food: $error');
+        // Show an error message to the user
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error al agregar alimento.')),
+        );
+      }
       // Handle form submission and save the food data
       if (kDebugMode) {
         print('Food data:');

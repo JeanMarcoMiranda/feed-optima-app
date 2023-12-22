@@ -74,7 +74,6 @@ class DatabaseHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         alimento TEXT,
         restriccion TEXT,
-
     ''');
   }
 }

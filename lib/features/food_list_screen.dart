@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodoptima/db/dao/food_dao.dart';
 import 'package:foodoptima/models/food_model.dart';
 import 'package:foodoptima/application/routes/app_router.dart';
 import 'package:foodoptima/widgets/food_data_search.dart';
@@ -9,22 +10,36 @@ class FoodListScreen extends StatefulWidget {
   const FoodListScreen({super.key});
   @override
   // ignore: library_private_types_in_public_api
-  _TablaScreenState createState() => _TablaScreenState();
+  State<FoodListScreen> createState() => _FoodListScreenState();
 }
 
-class _TablaScreenState extends State<FoodListScreen> {
-  List<FoodModel> alimentos = [
-    // FoodModel('Aceite de soya', 10, 1, 0.5),
-  ];
-
+class _FoodListScreenState extends State<FoodListScreen> {
+  List<FoodModel> alimentos = [];
   List<FoodModel> selectedAlimentos = [];
-
   final columns = [
     'Alimentos',
     'Materia Seca',
     'Proteínas Total',
     'Energía Metab. Mcal/kg'
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchAlimentos();
+  }
+
+  Future<void> _fetchAlimentos() async {
+    final foodDao = FoodDao();
+    try {
+      alimentos = await foodDao.getAll();
+      setState(() {}); // Update the UI
+    } catch (error) {
+      // Handle database errors
+      print('Error fetching foods: $error');
+      // Show an error message to the user
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,12 +94,7 @@ class _TablaScreenState extends State<FoodListScreen> {
               ),
             ],
           ),
-        ]
-            // child: DataTable(
-            //   columns: getColumns(columns),
-            //   rows: getRows(alimentos),
-            // ),
-            ),
+        ]),
       ),
       bottomNavigationBar: BottomNavigationBar(
         unselectedItemColor: Colors.black45,

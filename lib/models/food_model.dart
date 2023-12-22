@@ -1,5 +1,5 @@
 class FoodModel {
-  final int id;
+  final int? id;
   final String nombre;
   final double? materia_seca;
   final double? proteina_total;
@@ -14,7 +14,7 @@ class FoodModel {
   final double? vit_d;
 
   FoodModel({
-    required this.id,
+    this.id,
     required this.nombre,
     this.materia_seca,
     this.proteina_total,
