@@ -30,7 +30,7 @@ class DatabaseHelper {
     await db.execute('''
       CREATE TABLE alimentos (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        alimento TEXT,
+        nombre TEXT,
         materia_seca DOUBLE,
         proteina_total DOUBLE,
         energia_neta_g DOUBLE,
