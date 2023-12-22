@@ -1,6 +1,6 @@
 class CowRequirementsModel {
-  final int id;
-  final double? peso_vivo;
+  final int? id;
+  final String? peso_vivo;
   final double? energia_metab;
   final double? fibra_cruda;
   final double? calcio;
@@ -9,7 +9,7 @@ class CowRequirementsModel {
   final double? vit_d;
 
   CowRequirementsModel(
-      {required this.id,
+      {this.id,
       this.peso_vivo,
       this.energia_metab,
       this.fibra_cruda,
@@ -22,7 +22,7 @@ class CowRequirementsModel {
   factory CowRequirementsModel.fromJson(Map<String, dynamic> map) {
     return CowRequirementsModel(
       id: map['id'] as int,
-      peso_vivo: map['peso_vivo'] as double,
+      peso_vivo: map['peso_vivo'] as String,
       energia_metab: map['energia_metab'] as double,
       calcio: map['calcio'] as double,
       fosforo: map['fosforo'] as double,
@@ -54,7 +54,7 @@ class BullRequirementsModel extends CowRequirementsModel {
   final String? raza;
 
   BullRequirementsModel({
-    required super.id,
+    super.id,
     super.peso_vivo,
     super.energia_metab,
     super.fibra_cruda,
@@ -72,7 +72,7 @@ class BullRequirementsModel extends CowRequirementsModel {
   factory BullRequirementsModel.fromJson(Map<String, dynamic> map) {
     return BullRequirementsModel(
       id: map['id'] as int,
-      peso_vivo: map['peso_vivo'] as double,
+      peso_vivo: map['peso_vivo'] as String,
       energia_metab: map['energia_metab'] as double,
       calcio: map['calcio'] as double,
       fosforo: map['fosforo'] as double,

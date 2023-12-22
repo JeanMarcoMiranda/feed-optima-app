@@ -1,5 +1,7 @@
+import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
-import 'package:foodoptima/models/restriction_state.dart';
+import 'package:flutter/services.dart';
+import 'package:foodoptima/models/restriction_model.dart';
 import 'package:foodoptima/application/routes/app_router.dart';
 import 'package:go_router/go_router.dart';
 
@@ -11,20 +13,32 @@ class RestrictionsScreen extends StatefulWidget {
 }
 
 class _RestrictionsScreenState extends State<RestrictionsScreen> {
-  final restrictions = [
-    Restriccion(
-        alimento: "Aceites",
-        restriccionPor: "2-4% M.S, Baja fermentacion ruminal"),
-    Restriccion(
-        alimento: "Brote de Malta",
-        restriccionPor: "10% M.S. disminuye palatabilidad"),
-    Restriccion(
-        alimento: "Concentrados", restriccionPor: "50% M.S. acidosis ruminal"),
-    Restriccion(alimento: "Coronta de Maiz", restriccionPor: "Maximo, 20%"),
-    Restriccion(
-        alimento: "Ensilajes",
-        restriccionPor: "30 - 35% M.S. acidosis ruminal"),
-  ];
+  List<RestrictionState> restrictions = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _loadCSV();
+  }
+
+  void _loadCSV() async {
+    final rawRestrictionData =
+        await rootBundle.loadString('assets/restricciones.csv');
+
+    List<List<dynamic>> listDataRestrictions =
+        const CsvToListConverter().convert(rawRestrictionData);
+
+    List<RestrictionState> restrictionsList = listDataRestrictions
+        .skip(2)
+        .map(
+            (item) => RestrictionState(alimento: item[0], restriccion: item[1]))
+        .toList();
+
+    setState(() {
+      restrictions = restrictionsList;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,10 +64,10 @@ class _RestrictionsScreenState extends State<RestrictionsScreen> {
           const Row(
             children: [
               Padding(
-                padding: EdgeInsets.all(10),
+                padding: EdgeInsets.all(20),
                 child: Text(
                   "Alimentos",
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 22),
                   textAlign: TextAlign.left,
                 ),
               ),
@@ -96,13 +110,13 @@ class _RestrictionsScreenState extends State<RestrictionsScreen> {
     );
   }
 
-  Widget restrictionsListItem(Restriccion state) => CheckboxListTile(
+  Widget restrictionsListItem(RestrictionState state) => CheckboxListTile(
         controlAffinity: ListTileControlAffinity.leading,
         title: Text(
-          state.alimento,
+          state.alimento!,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        subtitle: Text(state.restriccionPor),
+        subtitle: Text(state.restriccion!),
         value: state.isSelected,
         onChanged: (value) {
           setState(() => state.isSelected = value!);

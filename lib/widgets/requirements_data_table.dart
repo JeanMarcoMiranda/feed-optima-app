@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:foodoptima/models/requirement_state.dart';
+import 'package:foodoptima/models/requirement_model.dart';
 
 class RequerimientosDataSource<T> extends DataTableSource {
   final List<T> _requerimientos;
@@ -12,7 +12,7 @@ class RequerimientosDataSource<T> extends DataTableSource {
   DataRow getRow(int index) {
     final requerimiento = _requerimientos[index];
 
-    if (requerimiento is RequerimientosToros) {
+    if (requerimiento is BullRequirementsModel) {
       return DataRow.byIndex(
           index: index,
           selected: _selectedRequerimientos.contains(requerimiento),
@@ -25,19 +25,19 @@ class RequerimientosDataSource<T> extends DataTableSource {
             notifyListeners();
           },
           cells: [
-            DataCell(Text(requerimiento.pesoVivo)),
-            DataCell(Text(requerimiento.proteina)),
-            DataCell(Text(requerimiento.eMetab)),
-            DataCell(Text(requerimiento.vitA)),
-            DataCell(Text(requerimiento.vitD)),
-            DataCell(Text(requerimiento.ca)),
-            DataCell(Text(requerimiento.p)),
-            DataCell(Text(requerimiento.fibra)),
-            DataCell(Text(requerimiento.ms)),
-            DataCell(Text(requerimiento.n.toString())),
-            DataCell(Text(requerimiento.raza)),
+            DataCell(Text(requerimiento.peso_vivo!)),
+            DataCell(Text("${requerimiento.proteina!}")),
+            DataCell(Text("${requerimiento.energia_metab!}")),
+            DataCell(Text("${requerimiento.vit_a!}")),
+            DataCell(Text("${requerimiento.vit_d!}")),
+            DataCell(Text("${requerimiento.calcio!}")),
+            DataCell(Text("${requerimiento.fosforo!}")),
+            DataCell(Text("${requerimiento.fibra_cruda!}")),
+            DataCell(Text("${requerimiento.ms!}")),
+            DataCell(Text(requerimiento.numero.toString())),
+            DataCell(Text(requerimiento.raza!)),
           ]);
-    } else if (requerimiento is RequerimientosVacas) {
+    } else if (requerimiento is CowRequirementsModel) {
       return DataRow.byIndex(
           index: index,
           selected: _selectedRequerimientos.contains(requerimiento),
@@ -50,13 +50,13 @@ class RequerimientosDataSource<T> extends DataTableSource {
             notifyListeners();
           },
           cells: [
-            DataCell(Text(requerimiento.pesoVivo)),
-            DataCell(Text(requerimiento.eMetab)),
-            DataCell(Text(requerimiento.vitA)),
-            DataCell(Text(requerimiento.vitD)),
-            DataCell(Text(requerimiento.ca)),
-            DataCell(Text(requerimiento.p)),
-            DataCell(Text(requerimiento.fibra)),
+            DataCell(Text(requerimiento.peso_vivo!)),
+            DataCell(Text("${requerimiento.energia_metab!}")),
+            DataCell(Text("${requerimiento.vit_a!}")),
+            DataCell(Text("${requerimiento.vit_d!}")),
+            DataCell(Text("${requerimiento.calcio!}")),
+            DataCell(Text("${requerimiento.fosforo!}")),
+            DataCell(Text("${requerimiento.fibra_cruda!}")),
           ]);
     } else {
       throw Exception('Unexpected data type encountered');

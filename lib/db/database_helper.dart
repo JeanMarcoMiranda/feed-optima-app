@@ -46,7 +46,7 @@ class DatabaseHelper {
 
     CREATE TABLE requerimientosToros (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        peso_vivo DOUBLE,
+        peso_vivo TEXT,
         energia_metab DOUBLE,
         fibra_cruda DOUBLE,
         calcio DOUBLE,
@@ -61,7 +61,7 @@ class DatabaseHelper {
 
     CREATE TABLE requerimientosVacas (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        peso_vivo DOUBLE,
+        peso_vivo TEXT,
         energia_metab DOUBLE,
         fibra_cruda DOUBLE,
         calcio DOUBLE,
