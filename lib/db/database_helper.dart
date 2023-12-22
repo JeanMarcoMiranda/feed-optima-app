@@ -42,7 +42,39 @@ class DatabaseHelper {
         fdn DOUBLE,
         vit_a DOUBLE,
         vit_d DOUBLE
-      )
+      );
+
+    CREATE TABLE requerimientosToros (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        peso_vivo DOUBLE,
+        energia_metab DOUBLE,
+        fibra_cruda DOUBLE,
+        calcio DOUBLE,
+        fosforo DOUBLE,
+        vit_a DOUBLE,
+        vit_d DOUBLE,
+        proteina DOUBLE,
+        ms DOUBLE,
+        numero INTEGER,
+        raza TEXT
+    );
+
+    CREATE TABLE requerimientosVacas (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        peso_vivo DOUBLE,
+        energia_metab DOUBLE,
+        fibra_cruda DOUBLE,
+        calcio DOUBLE,
+        fosforo DOUBLE,
+        vit_a DOUBLE,
+        vit_d DOUBLE,
+    );
+
+    CREATE TABLE restricciones (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        alimento TEXT,
+        restriccion TEXT,
+
     ''');
   }
 }
