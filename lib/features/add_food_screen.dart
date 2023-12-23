@@ -52,33 +52,20 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
         print('Food inserted with ID: $id');
 
         // Handle successful insertion (e.g., show a success message)
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Alimento agregado exitosamente!')),
+          const SnackBar(content: Text('Alimento agregado exitosamente!')),
         );
-        Navigator.pop(context); // Navigate back to previous screen
+        // ignore: use_build_context_synchronously
+        Navigator.pop(context, true); // Navigate back to previous screen
       } catch (error) {
         // Handle database errors
         print('Error inserting food: $error');
         // Show an error message to the user
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al agregar alimento.')),
+          const SnackBar(content: Text('Error al agregar alimento.')),
         );
-      }
-      // Handle form submission and save the food data
-      if (kDebugMode) {
-        print('Food data:');
-        print('  Food Name: $_foodName');
-        print('  Dry Matter: $_dryMatter');
-        print('  Crude Protein: $_crudeProtein');
-        print('  Net Energy (GMcal/Kg): $_netEnergyGMcalKg');
-        print('  Metabolic Energy (Mcal/Kg): $_metabolicEnergyMcalKg');
-        print('  NDT: $_ndt');
-        print('  Calcium: $_calcium');
-        print('  Phosphorus: $_phosphorus');
-        print('  Crude Fiber: $_crudeFiber');
-        print('  FDN: $_fdn');
-        print('  Vitamin A: $_vitaminA');
-        print('  Vitamin D: $_vitaminD');
       }
     }
   }

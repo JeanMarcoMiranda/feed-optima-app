@@ -28,6 +28,12 @@ class _FoodListScreenState extends State<FoodListScreen> {
     super.initState();
     _fetchAlimentos();
   }
+  // bool didPopRoute() {
+  //   setState(() {
+  //     _fetchAlimentos(); // Recuperar la lista actualizada
+  //   });
+  //   return true;
+  // }
 
   Future<void> _fetchAlimentos() async {
     final foodDao = FoodDao();
@@ -62,7 +68,11 @@ class _FoodListScreenState extends State<FoodListScreen> {
         actions: [
           IconButton(
               onPressed: () {
-                context.goNamed(RouteNames.addFood);
+                context.pushNamed(RouteNames.addFood).then((value) => setState(
+                      () {
+                        _fetchAlimentos();
+                      },
+                    ));
               },
               icon: const Icon(
                 Icons.add,
