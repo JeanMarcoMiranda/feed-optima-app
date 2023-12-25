@@ -51,6 +51,9 @@ class FoodModel {
       fdn: map['fdn'] as double,
       vitaminA: map['vitaminA'] as double,
       vitaminD: map['vitaminD'] as double,
+      quantity: map['quantity'] as double,
+      cost: map['cost'] as double,
+      unitCost: map['unitCost'] as double,
     );
   }
 
@@ -70,6 +73,9 @@ class FoodModel {
       'fdn': fdn,
       'vitaminA': vitaminA,
       'vitaminD': vitaminD,
+      'quantity': quantity,
+      'cost': cost,
+      'unitCost': unitCost,
     };
   }
 }
