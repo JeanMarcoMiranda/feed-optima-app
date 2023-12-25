@@ -32,13 +32,13 @@ class DataSearch extends SearchDelegate<FoodModel> {
   Widget buildResults(BuildContext context) {
     final results = alimentos
         .where((alimento) =>
-            alimento.nombre.toLowerCase().contains(query.toLowerCase()))
+            alimento.name.toLowerCase().contains(query.toLowerCase()))
         .toList();
     return ListView.builder(
       itemCount: results.length,
       itemBuilder: (context, index) {
         return ListTile(
-          title: Text(results[index].nombre),
+          title: Text(results[index].name),
           onTap: () {
             close(context, results[index]);
           },
@@ -51,13 +51,13 @@ class DataSearch extends SearchDelegate<FoodModel> {
   Widget buildSuggestions(BuildContext context) {
     final results = alimentos
         .where((alimento) =>
-            alimento.nombre.toLowerCase().contains(query.toLowerCase()))
+            alimento.name.toLowerCase().contains(query.toLowerCase()))
         .toList();
     return ListView.builder(
       itemCount: results.length,
       itemBuilder: (context, index) {
         return ListTile(
-          title: Text(results[index].nombre),
+          title: Text(results[index].name),
           onTap: () {
             close(context, results[index]);
           },

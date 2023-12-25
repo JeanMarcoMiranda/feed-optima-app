@@ -30,50 +30,54 @@ class DatabaseHelper {
     await db.execute('''
       CREATE TABLE alimentos (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nombre TEXT,
-        materia_seca DOUBLE,
-        proteina_total DOUBLE,
-        energia_neta_g DOUBLE,
-        energia_metab DOUBLE,
+        name TEXT,
+        dryMatter DOUBLE,
+        totalProtein DOUBLE,
+        netEnergyG DOUBLE,
+        metabolizableEnergy DOUBLE,
         ndt DOUBLE,
-        calcio DOUBLE,
-        fosforo DOUBLE,
-        fibra_cruda DOUBLE,
+        calcium DOUBLE,
+        phosphorus DOUBLE,
+        crudeFiber DOUBLE,
         fdn DOUBLE,
-        vit_a DOUBLE,
-        vit_d DOUBLE
+        vitaminA DOUBLE,
+        vitaminD DOUBLE,
+        quantity DOUBLE,
+        cost DOUBLE,
+        unitCost DOUBLE
       );
 
-    CREATE TABLE requerimientosToros (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        peso_vivo TEXT,
-        energia_metab DOUBLE,
-        fibra_cruda DOUBLE,
-        calcio DOUBLE,
-        fosforo DOUBLE,
-        vit_a DOUBLE,
-        vit_d DOUBLE,
-        proteina DOUBLE,
-        ms DOUBLE,
-        numero INTEGER,
-        raza TEXT
-    );
+      CREATE TABLE requerimientosToros (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          peso_vivo TEXT,
+          energia_metab DOUBLE,
+          fibra_cruda DOUBLE,
+          calcio DOUBLE,
+          fosforo DOUBLE,
+          vit_a DOUBLE,
+          vit_d DOUBLE,
+          proteina DOUBLE,
+          ms DOUBLE,
+          numero INTEGER,
+          raza TEXT
+      );
 
-    CREATE TABLE requerimientosVacas (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        peso_vivo TEXT,
-        energia_metab DOUBLE,
-        fibra_cruda DOUBLE,
-        calcio DOUBLE,
-        fosforo DOUBLE,
-        vit_a DOUBLE,
-        vit_d DOUBLE,
-    );
+      CREATE TABLE requerimientosVacas (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          peso_vivo TEXT,
+          energia_metab DOUBLE,
+          fibra_cruda DOUBLE,
+          calcio DOUBLE,
+          fosforo DOUBLE,
+          vit_a DOUBLE,
+          vit_d DOUBLE
+      );
 
-    CREATE TABLE restricciones (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        alimento TEXT,
-        restriccion TEXT,
+      CREATE TABLE restricciones (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          alimento TEXT,
+          restriccion TEXT
+      );
     ''');
   }
 }

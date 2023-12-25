@@ -1,50 +1,56 @@
 class FoodModel {
   final int? id;
-  final String nombre;
-  final double? materia_seca;
-  final double? proteina_total;
-  final double? energia_neta_g;
-  final double? energia_metab;
+  final String name;
+  final double? dryMatter;
+  final double? totalProtein;
+  final double? netEnergyG;
+  final double? metabolizableEnergy;
   final double? ndt;
-  final double? calcio;
-  final double? fosforo;
-  final double? fibra_cruda;
+  final double? calcium;
+  final double? phosphorus;
+  final double? crudeFiber;
   final double? fdn;
-  final double? vit_a;
-  final double? vit_d;
+  final double? vitaminA;
+  final double? vitaminD;
+  double? quantity;
+  double? cost;
+  double? unitCost;
 
   FoodModel({
     this.id,
-    required this.nombre,
-    this.materia_seca,
-    this.proteina_total,
-    this.energia_neta_g,
-    this.energia_metab,
+    required this.name,
+    this.dryMatter,
+    this.totalProtein,
+    this.netEnergyG,
+    this.metabolizableEnergy,
     this.ndt,
-    this.calcio,
-    this.fosforo,
-    this.fibra_cruda,
+    this.calcium,
+    this.phosphorus,
+    this.crudeFiber,
     this.fdn,
-    this.vit_a,
-    this.vit_d,
+    this.vitaminA,
+    this.vitaminD,
+    this.quantity,
+    this.cost,
+    this.unitCost,
   });
 
   // Función factory para crear un objeto FoodModel a partir de un mapa
   factory FoodModel.fromJson(Map<String, dynamic> map) {
     return FoodModel(
       id: map['id'] as int,
-      nombre: map['nombre'] as String,
-      materia_seca: map['materia_seca'] as double,
-      proteina_total: map['proteina_total'] as double,
-      energia_neta_g: map['energia_neta_g'] as double,
-      energia_metab: map['energia_metab'] as double,
+      name: map['name'] as String,
+      dryMatter: map['dryMatter'] as double,
+      totalProtein: map['totalProtein'] as double,
+      netEnergyG: map['netEnergyG'] as double,
+      metabolizableEnergy: map['metabolizableEnergy'] as double,
       ndt: map['ndt'] as double,
-      calcio: map['calcio'] as double,
-      fosforo: map['fosforo'] as double,
-      fibra_cruda: map['fibra_cruda'] as double,
+      calcium: map['calcium'] as double,
+      phosphorus: map['phosphorus'] as double,
+      crudeFiber: map['crudeFiber'] as double,
       fdn: map['fdn'] as double,
-      vit_a: map['vit_a'] as double,
-      vit_d: map['vit_d'] as double,
+      vitaminA: map['vitaminA'] as double,
+      vitaminD: map['vitaminD'] as double,
     );
   }
 
@@ -52,18 +58,18 @@ class FoodModel {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'nombre': nombre,
-      'materia_seca': materia_seca,
-      'proteina_total': proteina_total,
-      'energia_neta_g': energia_neta_g,
-      'energia_metab': energia_metab,
+      'name': name,
+      'dryMatter': dryMatter,
+      'totalProtein': totalProtein,
+      'netEnergyG': netEnergyG,
+      'metabolizableEnergy': metabolizableEnergy,
       'ndt': ndt,
-      'calcio': calcio,
-      'fosforo': fosforo,
-      'fibra_cruda': fibra_cruda,
+      'calcium': calcium,
+      'phosphorus': phosphorus,
+      'crudeFiber': crudeFiber,
       'fdn': fdn,
-      'vit_a': vit_a,
-      'vit_d': vit_d,
+      'vitaminA': vitaminA,
+      'vitaminD': vitaminD,
     };
   }
 }

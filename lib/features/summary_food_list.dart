@@ -1,33 +1,18 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:foodoptima/models/food_model.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:external_path/external_path.dart';
 
-class Alimento {
-  final String nombre;
-  double cantidad;
-  double costo;
-  double costoUnitario;
-
-  Alimento({
-    required this.nombre,
-    required this.cantidad,
-    required this.costo,
-    required this.costoUnitario,
-  });
-}
-
 class SummaryFoodScreen extends StatefulWidget {
-  final List<Alimento> alimentos;
-  final double cantidadTotal;
+  final List<FoodModel> alimentos;
 
   const SummaryFoodScreen({
     super.key,
     required this.alimentos,
-    required this.cantidadTotal,
   });
 
   @override
@@ -82,14 +67,14 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
                         content: TextField(
                           controller: nameFileController,
                           decoration: const InputDecoration(
-                            labelText: 'Ingrese el nombre del archivo',
+                            labelText: 'Ingrese el name del archivo',
                           ),
                         ),
                         actions: [
                           TextButton(
                             child: const Text('Guardar'),
                             onPressed: () {
-                              // Guarda el documento PDF con el nombre especificado por el usuario
+                              // Guarda el documento PDF con el name especificado por el usuario
                               guardarEnPDF(nameFileController.text);
                               Navigator.pop(context);
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -158,15 +143,15 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
                 final alimento = widget.alimentos[index];
                 return ListTile(
                   title: Text(
-                    alimento.nombre,
+                    alimento.name,
                     style: const TextStyle(fontSize: 20),
                   ),
                   subtitle: Text(
-                    'Cantidad: ${alimento.cantidad} kg',
+                    'Cantidad: ${alimento.quantity} kg',
                     style: const TextStyle(fontSize: 15),
                   ),
                   trailing: Text(
-                    'Costo: S/.${alimento.costo}',
+                    'Costo: S/.${alimento.cost}',
                     style: const TextStyle(fontSize: 14),
                   ),
                 );
@@ -218,31 +203,31 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
   }
 
   void _restablecerLista() {
-    //arreglar, la cantidad por defecto que se envía es 0
+    //arreglar, la quantity por defecto que se envía es 0
     //o 1 para el precio unitario desde el main.dart
     for (final alimento in widget.alimentos) {
-      alimento.cantidad = 1;
-      alimento.costo = alimento.costoUnitario;
+      alimento.quantity = 1;
+      alimento.cost = alimento.unitCost;
     }
     _cantidadTotal = 0;
     _costeTotal = 0;
   }
 
   void _actualizarLista(double cantidadTotal) {
-    // Actualiza la cantidad y costo de cada alimento y totales
+    // Actualiza la quantity y cost de cada alimento y totales
     for (final alimento in widget.alimentos) {
-      alimento.cantidad = cantidadTotal / widget.alimentos.length;
-      alimento.cantidad = double.parse(alimento.cantidad.toStringAsFixed(2));
+      alimento.quantity = cantidadTotal / widget.alimentos.length;
+      alimento.quantity = double.parse(alimento.quantity!.toStringAsFixed(2));
 
-      // Actualiza el costo de cada producto
-      alimento.costo = alimento.costoUnitario * alimento.cantidad;
-      alimento.costo = double.parse(alimento.costo.toStringAsFixed(2));
+      // Actualiza el cost de cada producto
+      alimento.cost = (alimento.unitCost! * alimento.quantity!);
+      alimento.cost = double.parse(alimento.cost!.toStringAsFixed(2));
     }
     _cantidadTotal = cantidadTotal;
     _costeTotal = 0;
 
     for (final alimento in widget.alimentos) {
-      _costeTotal += alimento.cantidad * alimento.costoUnitario;
+      _costeTotal += alimento.quantity! * alimento.unitCost!;
     }
     _costeTotal = double.parse(_costeTotal.toStringAsFixed(2));
   }
@@ -312,15 +297,15 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
                 pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.center,
                     mainAxisAlignment: pw.MainAxisAlignment.center,
-                    children: [pw.Text(alimento.nombre)]),
+                    children: [pw.Text(alimento.name)]),
                 pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.center,
                     mainAxisAlignment: pw.MainAxisAlignment.center,
-                    children: [pw.Text("${alimento.cantidad.toString()} kg")]),
+                    children: [pw.Text("${alimento.quantity.toString()} kg")]),
                 pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.center,
                     mainAxisAlignment: pw.MainAxisAlignment.center,
-                    children: [pw.Text("S/. ${alimento.costo.toString()}")]),
+                    children: [pw.Text("S/. ${alimento.cost.toString()}")]),
               ]),
             pw.TableRow(children: [
               pw.Column(

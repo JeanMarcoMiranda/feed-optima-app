@@ -9,7 +9,6 @@ import 'package:go_router/go_router.dart';
 class FoodListScreen extends StatefulWidget {
   const FoodListScreen({super.key});
   @override
-  // ignore: library_private_types_in_public_api
   State<FoodListScreen> createState() => _FoodListScreenState();
 }
 
@@ -28,12 +27,6 @@ class _FoodListScreenState extends State<FoodListScreen> {
     super.initState();
     _fetchAlimentos();
   }
-  // bool didPopRoute() {
-  //   setState(() {
-  //     _fetchAlimentos(); // Recuperar la lista actualizada
-  //   });
-  //   return true;
-  // }
 
   Future<void> _fetchAlimentos() async {
     final foodDao = FoodDao();

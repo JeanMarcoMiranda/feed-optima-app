@@ -12,10 +12,10 @@ class AlimentosDataSource extends DataTableSource {
     if (index < _alimentos.length) {
       final alimento = _alimentos[index];
       final cells = [
-        alimento.nombre,
-        alimento.materia_seca,
-        alimento.proteina_total,
-        alimento.energia_metab
+        alimento.name,
+        alimento.dryMatter,
+        alimento.totalProtein,
+        alimento.metabolizableEnergy
       ];
       return DataRow.byIndex(
         index: index,

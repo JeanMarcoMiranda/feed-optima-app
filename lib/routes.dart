@@ -6,6 +6,7 @@ import 'package:foodoptima/features/previous_lists_screen.dart';
 import 'package:foodoptima/features/requirements_screen.dart';
 import 'package:foodoptima/features/restrictions_screen.dart';
 import 'package:foodoptima/features/summary_food_list.dart';
+import 'package:foodoptima/models/food_model.dart';
 import 'package:go_router/go_router.dart';
 
 final GoRouter router = GoRouter(routes: [
@@ -45,16 +46,11 @@ final GoRouter router = GoRouter(routes: [
           name: RouteNames.summaryFood,
           path: 'summaryFood',
           builder: (context, state) => SummaryFoodScreen(alimentos: [
-            Alimento(
-                nombre: 'Arroz', cantidad: 1.0, costo: 1.2, costoUnitario: 1.2),
-            Alimento(
-                nombre: 'Lentejas',
-                cantidad: 1.0,
-                costo: 1.5,
-                costoUnitario: 1.5),
-            Alimento(
-                nombre: 'Papas', cantidad: 1.0, costo: 0.8, costoUnitario: 0.8),
-          ], cantidadTotal: 5.0),
+            FoodModel(name: 'Arroz', quantity: 1.0, cost: 1.2, unitCost: 1.2),
+            FoodModel(
+                name: 'Lentejas', quantity: 1.0, cost: 1.5, unitCost: 1.5),
+            FoodModel(name: 'Papas', quantity: 1.0, cost: 0.8, unitCost: 0.8),
+          ]),
         ),
       ])
 ]);
