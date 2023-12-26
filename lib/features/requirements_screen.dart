@@ -2,9 +2,11 @@ import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:foodoptima/application/routes/app_router.dart';
+import 'package:foodoptima/providers/food_provider.dart';
 import 'package:foodoptima/widgets/requirements_data_table.dart';
 import 'package:foodoptima/models/requirement_model.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class RequirementsScreen extends StatefulWidget {
@@ -166,6 +168,8 @@ class _RequirementsScreenState extends State<RequirementsScreen> {
           if (index == 0) {
             context.pop();
           } else if (index == 1) {
+            context.read<FoodProvider>().changeRequirementsList(
+                newRequirementList: selectedRequirements);
             context.pushNamed(RouteNames.foodList);
           }
         },

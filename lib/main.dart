@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:foodoptima/db/database_helper.dart';
 import 'package:foodoptima/application/theme/app_theme.dart';
+import 'package:foodoptima/providers/food_provider.dart';
+import 'package:provider/provider.dart';
 import 'routes.dart';
 
 Future main() async {
@@ -31,11 +33,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme().theme(),
-      title: 'Food Optima',
-      routerConfig: router,
-    );
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => FoodProvider())
+        ],
+        child: MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme().theme(),
+          title: 'Food Optima',
+          routerConfig: router,
+        ));
   }
 }

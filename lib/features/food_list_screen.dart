@@ -1,10 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:foodoptima/db/dao/food_dao.dart';
 import 'package:foodoptima/models/food_model.dart';
 import 'package:foodoptima/application/routes/app_router.dart';
+import 'package:foodoptima/providers/food_provider.dart';
 import 'package:foodoptima/widgets/food_data_search.dart';
 import 'package:foodoptima/widgets/food_data_table.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class FoodListScreen extends StatefulWidget {
   const FoodListScreen({super.key});
@@ -42,6 +46,8 @@ class _FoodListScreenState extends State<FoodListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    log("${context.watch<FoodProvider>().requirementsList}");
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
