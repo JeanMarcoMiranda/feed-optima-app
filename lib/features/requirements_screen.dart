@@ -132,17 +132,17 @@ class _RequirementsScreenState extends State<RequirementsScreen> {
       body: ListView(
         children: [
           PaginatedDataTable(
-              columns: getColumns(widget.requirementsFor == 'bulls'
-                  ? bullsColumns
-                  : cowsColumns),
-              rowsPerPage: 11,
-              header: Text(
-                  "Requerimientos en ${widget.requirementsFor == 'bulls' ? 'Toros' : 'Vacas'}"),
-              source: RequerimientosDataSource(
-                  widget.requirementsFor == 'bulls'
-                      ? requerimientosToros
-                      : requerimientosVacas,
-                  selectedRequirements)),
+            columns: getColumns(
+                widget.requirementsFor == 'bulls' ? bullsColumns : cowsColumns),
+            rowsPerPage: 11,
+            header: Text(
+                "Requerimientos en ${widget.requirementsFor == 'bulls' ? 'Toros' : 'Vacas'}"),
+            source: RequerimientosDataSource(
+                widget.requirementsFor == 'bulls'
+                    ? requerimientosToros
+                    : requerimientosVacas,
+                selectedRequirements),
+          ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

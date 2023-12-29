@@ -16,7 +16,7 @@ class RestrictionModel {
 
   // Método para convertir el objeto FoodModel a un mapa
   Map<String, dynamic> toMap() {
-    return {'id': id, 'alimenot': alimento, 'restriccion': restriccion};
+    return {'id': id, 'alimento': alimento, 'restriccion': restriccion};
   }
 }
 

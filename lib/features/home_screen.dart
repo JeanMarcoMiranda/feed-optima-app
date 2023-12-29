@@ -1,10 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:foodoptima/application/routes/app_router.dart';
+import 'package:foodoptima/db/data/loadDataFromExcel.dart';
 import 'package:foodoptima/widgets/card_widget.dart';
 import 'package:go_router/go_router.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    DataLoader dataLoader = DataLoader();
+    dataLoader.upLoadDataOnEmpty();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +39,14 @@ class HomeScreen extends StatelessWidget {
         leading: Container(),
         actions: [
           IconButton(
-              onPressed: () {
-                context.pushNamed(RouteNames.previousLists);
-              },
-              icon: const Icon(
-                Icons.list_alt_outlined,
-                color: Colors.white,
-              ))
+            onPressed: () {
+              context.pushNamed(RouteNames.previousLists);
+            },
+            icon: const Icon(
+              Icons.list_alt_outlined,
+              color: Colors.white,
+            ),
+          )
         ],
       ),
       body: Center(
