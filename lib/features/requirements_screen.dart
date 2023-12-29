@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:foodoptima/application/routes/app_router.dart';
+import 'package:foodoptima/db/dao/requirement_dao.dart';
 import 'package:foodoptima/providers/food_provider.dart';
 import 'package:foodoptima/widgets/requirements_data_table.dart';
 import 'package:foodoptima/models/requirement_model.dart';
@@ -26,61 +29,34 @@ class _RequirementsScreenState extends State<RequirementsScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _loadCSV();
+
+    if (widget.requirementsFor == 'bulls') {
+      _fetchBullRequirements();
+    } else {
+      _fetchCowRequirements();
+    }
   }
 
-  void _loadCSV() async {
-    final rawDataBulls =
-        await rootBundle.loadString('assets/requerimientosToros.csv');
-    final rawDataCows =
-        await rootBundle.loadString('assets/requerimientosVacas.csv');
+  Future<void> _fetchCowRequirements() async {
+    final cowReqDao = CowRequirementsDao();
+    try {
+      final fetchedData = await cowReqDao.getAll();
+      log("$fetchedData");
+      requerimientosVacas = fetchedData;
+      setState(() {});
+    } catch (error) {
+      log('Error fetching cow requirements: $error');
+    }
+  }
 
-    List<List<dynamic>> listDataBulls =
-        const CsvToListConverter().convert(rawDataBulls);
-    List<List<dynamic>> listDataCows =
-        const CsvToListConverter().convert(rawDataCows);
-
-    List<BullRequirementsModel> listReqToros = listDataBulls
-        .skip(1)
-        .map((item) => BullRequirementsModel(
-              peso_vivo: "${item[0]}",
-              proteina:
-                  double.parse("${item[1]}".replaceFirst(RegExp(','), '.')),
-              energia_metab:
-                  double.parse("${item[2]}".replaceFirst(RegExp(','), '.')),
-              vit_a: double.parse("${item[3]}".replaceFirst(RegExp(','), '.')),
-              vit_d: double.parse("${item[4]}".replaceFirst(RegExp(','), '.')),
-              calcio: double.parse("${item[5]}".replaceFirst(RegExp(','), '.')),
-              fosforo:
-                  double.parse("${item[6]}".replaceFirst(RegExp(','), '.')),
-              fibra_cruda:
-                  double.parse("${item[7]}".replaceFirst(RegExp(','), '.')),
-              ms: double.parse("${item[8]}".replaceFirst(RegExp(','), '.')),
-              numero: int.parse("${item[9]}"),
-              raza: item[10],
-            ))
-        .toList();
-
-    List<CowRequirementsModel> listReqVacas = listDataCows
-        .skip(2)
-        .map((item) => CowRequirementsModel(
-              peso_vivo: "${item[0]}",
-              energia_metab:
-                  double.parse("${item[1]}".replaceFirst(RegExp(','), '.')),
-              vit_a: double.parse("${item[2]}".replaceFirst(RegExp(','), '.')),
-              vit_d: double.parse("${item[3]}".replaceFirst(RegExp(','), '.')),
-              calcio: double.parse("${item[4]}".replaceFirst(RegExp(','), '.')),
-              fosforo:
-                  double.parse("${item[5]}".replaceFirst(RegExp(','), '.')),
-              fibra_cruda:
-                  double.parse("${item[6]}".replaceFirst(RegExp(','), '.')),
-            ))
-        .toList();
-
-    setState(() {
-      requerimientosToros = listReqToros;
-      requerimientosVacas = listReqVacas;
-    });
+  Future<void> _fetchBullRequirements() async {
+    final bullReqDao = BullRequirementsDao();
+    try {
+      requerimientosToros = await bullReqDao.getAll();
+      setState(() {});
+    } catch (error) {
+      log('Error fetching cow requirements: $error');
+    }
   }
 
   final cowsColumns = [
