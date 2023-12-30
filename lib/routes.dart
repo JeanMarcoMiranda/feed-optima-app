@@ -45,12 +45,7 @@ final GoRouter router = GoRouter(routes: [
         GoRoute(
           name: RouteNames.summaryFood,
           path: 'summaryFood',
-          builder: (context, state) => SummaryFoodScreen(alimentos: [
-            FoodModel(name: 'Arroz', quantity: 1.0, cost: 1.2, unitCost: 1.2),
-            FoodModel(
-                name: 'Lentejas', quantity: 1.0, cost: 1.5, unitCost: 1.5),
-            FoodModel(name: 'Papas', quantity: 1.0, cost: 0.8, unitCost: 0.8),
-          ]),
+          builder: (context, state) => const SummaryFoodScreen(),
         ),
       ])
 ]);

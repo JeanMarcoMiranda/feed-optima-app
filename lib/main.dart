@@ -34,14 +34,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => FoodProvider())
-        ],
-        child: MaterialApp.router(
-          debugShowCheckedModeBanner: false,
-          theme: AppTheme().theme(),
-          title: 'Food Optima',
-          routerConfig: router,
-        ));
+      providers: [ChangeNotifierProvider(create: (context) => FoodProvider())],
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme().theme(),
+        title: 'Food Optima',
+        routerConfig: router,
+      ),
+    );
   }
 }

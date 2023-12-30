@@ -2,8 +2,8 @@ import 'package:foodoptima/db/queries/tables.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
-  static final _databaseName = 'database.db';
-  static final _databaseVersion = 1;
+  static const _databaseName = 'database.db';
+  static const _databaseVersion = 1;
   static DatabaseHelper? _databaseHelper;
   static Database? _database;
 

@@ -2,17 +2,16 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:foodoptima/models/food_model.dart';
+import 'package:foodoptima/providers/food_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:external_path/external_path.dart';
+import 'package:provider/provider.dart';
 
 class SummaryFoodScreen extends StatefulWidget {
-  final List<FoodModel> alimentos;
-
   const SummaryFoodScreen({
     super.key,
-    required this.alimentos,
   });
 
   @override
@@ -22,8 +21,11 @@ class SummaryFoodScreen extends StatefulWidget {
 class _SummaryFoodState extends State<SummaryFoodScreen> {
   double _cantidadTotal = 0;
   double _costeTotal = 0;
+
   @override
   Widget build(BuildContext context) {
+    final List<FoodModel> alimentos = context.watch<FoodProvider>().foodList;
+
     return Scaffold(
       appBar: AppBar(
         title: const Center(
@@ -75,7 +77,7 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
                             child: const Text('Guardar'),
                             onPressed: () {
                               // Guarda el documento PDF con el name especificado por el usuario
-                              guardarEnPDF(nameFileController.text);
+                              guardarEnPDF(nameFileController.text, alimentos);
                               Navigator.pop(context);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
@@ -126,11 +128,11 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
               onChanged: (value) {
                 if (value.isEmpty) {
                   setState(() {
-                    _restablecerLista();
+                    _restablecerLista(alimentos);
                   });
                 } else {
                   setState(() {
-                    _actualizarLista(double.parse(value));
+                    _actualizarLista(double.parse(value), alimentos);
                   });
                 }
               },
@@ -138,9 +140,9 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
           ),
           Expanded(
             child: ListView.separated(
-              itemCount: widget.alimentos.length,
+              itemCount: alimentos.length,
               itemBuilder: (context, index) {
-                final alimento = widget.alimentos[index];
+                final alimento = alimentos[index];
                 return ListTile(
                   title: Text(
                     alimento.name,
@@ -202,10 +204,10 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
     );
   }
 
-  void _restablecerLista() {
+  void _restablecerLista(List<FoodModel> alimentos) {
     //arreglar, la quantity por defecto que se envía es 0
     //o 1 para el precio unitario desde el main.dart
-    for (final alimento in widget.alimentos) {
+    for (final alimento in alimentos) {
       alimento.quantity = 1;
       alimento.cost = alimento.unitCost;
     }
@@ -213,10 +215,10 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
     _costeTotal = 0;
   }
 
-  void _actualizarLista(double cantidadTotal) {
+  void _actualizarLista(double cantidadTotal, List<FoodModel> alimentos) {
     // Actualiza la quantity y cost de cada alimento y totales
-    for (final alimento in widget.alimentos) {
-      alimento.quantity = cantidadTotal / widget.alimentos.length;
+    for (final alimento in alimentos) {
+      alimento.quantity = cantidadTotal / alimentos.length;
       alimento.quantity = double.parse(alimento.quantity!.toStringAsFixed(2));
 
       // Actualiza el cost de cada producto
@@ -226,13 +228,13 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
     _cantidadTotal = cantidadTotal;
     _costeTotal = 0;
 
-    for (final alimento in widget.alimentos) {
+    for (final alimento in alimentos) {
       _costeTotal += alimento.quantity! * alimento.unitCost!;
     }
     _costeTotal = double.parse(_costeTotal.toStringAsFixed(2));
   }
 
-  Future<void> guardarEnPDF(String name) async {
+  Future<void> guardarEnPDF(String name, List<FoodModel> alimentos) async {
     // Crea un documento PDF
     final pdf = pw.Document(version: PdfVersion.pdf_1_5, compress: true);
     final creationDate = DateTime.now();
@@ -292,7 +294,7 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
                   mainAxisAlignment: pw.MainAxisAlignment.center,
                   children: [pw.Text("COSTO")]),
             ]),
-            for (final alimento in widget.alimentos)
+            for (final alimento in alimentos)
               pw.TableRow(children: [
                 pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.center,

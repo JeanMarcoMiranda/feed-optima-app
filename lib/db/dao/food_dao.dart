@@ -53,7 +53,6 @@ class FoodDao {
   Future<bool> isEmpty(String tabla) async {
     Database db = await dbHelper;
     final count = await db.query(tabla).then((results) => results.length);
-    print(count);
     // Si el número de registros es 0, la tabla está vacía
     return count == 0;
   }

@@ -128,6 +128,9 @@ class _FoodListScreenState extends State<FoodListScreen> {
           if (index == 0) {
             context.pop();
           } else if (index == 1) {
+            context
+                .read<FoodProvider>()
+                .changeFoodList(newFoodList: selectedAlimentos);
             context.pushNamed(RouteNames.restrictions);
           }
         },

@@ -68,17 +68,25 @@ class DataLoader {
     List<List<dynamic>> listDataCows =
         const CsvToListConverter().convert(rawDataCows);
 
-    listDataCows.skip(2).map((item) => cowReqDao.insert(CowRequirementsModel(
-          peso_vivo: "${item[0]}",
-          energia_metab:
-              double.parse("${item[1]}".replaceFirst(RegExp(','), '.')),
-          vit_a: double.parse("${item[2]}".replaceFirst(RegExp(','), '.')),
-          vit_d: double.parse("${item[3]}".replaceFirst(RegExp(','), '.')),
-          calcio: double.parse("${item[4]}".replaceFirst(RegExp(','), '.')),
-          fosforo: double.parse("${item[5]}".replaceFirst(RegExp(','), '.')),
-          fibra_cruda:
-              double.parse("${item[6]}".replaceFirst(RegExp(','), '.')),
-        )));
+    List<CowRequirementsModel> listCows = listDataCows
+        .skip(2)
+        .map((item) => CowRequirementsModel(
+              peso_vivo: "${item[0]}",
+              energia_metab:
+                  double.parse("${item[1]}".replaceFirst(RegExp(','), '.')),
+              vit_a: double.parse("${item[2]}".replaceFirst(RegExp(','), '.')),
+              vit_d: double.parse("${item[3]}".replaceFirst(RegExp(','), '.')),
+              calcio: double.parse("${item[4]}".replaceFirst(RegExp(','), '.')),
+              fosforo:
+                  double.parse("${item[5]}".replaceFirst(RegExp(','), '.')),
+              fibra_cruda:
+                  double.parse("${item[6]}".replaceFirst(RegExp(','), '.')),
+            ))
+        .toList();
+    // Inserta las vacas en la base de datos
+    for (CowRequirementsModel cow in listCows) {
+      cowReqDao.insert(cow);
+    }
   }
 
   void _loadBullRequirementsFromCSV() async {
@@ -88,22 +96,29 @@ class DataLoader {
     List<List<dynamic>> listDataBulls =
         const CsvToListConverter().convert(rawDataBulls);
 
-    listDataBulls.skip(1).map((item) => {
-          bullReqDao.insert(BullRequirementsModel(
-            peso_vivo: "${item[0]}",
-            proteina: double.parse("${item[1]}".replaceFirst(RegExp(','), '.')),
-            energia_metab:
-                double.parse("${item[2]}".replaceFirst(RegExp(','), '.')),
-            vit_a: double.parse("${item[3]}".replaceFirst(RegExp(','), '.')),
-            vit_d: double.parse("${item[4]}".replaceFirst(RegExp(','), '.')),
-            calcio: double.parse("${item[5]}".replaceFirst(RegExp(','), '.')),
-            fosforo: double.parse("${item[6]}".replaceFirst(RegExp(','), '.')),
-            fibra_cruda:
-                double.parse("${item[7]}".replaceFirst(RegExp(','), '.')),
-            ms: double.parse("${item[8]}".replaceFirst(RegExp(','), '.')),
-            numero: int.parse("${item[9]}"),
-            raza: item[10],
-          ))
-        });
+    List<BullRequirementsModel> listBulls = listDataBulls
+        .skip(1)
+        .map((item) => BullRequirementsModel(
+              peso_vivo: "${item[0]}",
+              proteina:
+                  double.parse("${item[1]}".replaceFirst(RegExp(','), '.')),
+              energia_metab:
+                  double.parse("${item[2]}".replaceFirst(RegExp(','), '.')),
+              vit_a: double.parse("${item[3]}".replaceFirst(RegExp(','), '.')),
+              vit_d: double.parse("${item[4]}".replaceFirst(RegExp(','), '.')),
+              calcio: double.parse("${item[5]}".replaceFirst(RegExp(','), '.')),
+              fosforo:
+                  double.parse("${item[6]}".replaceFirst(RegExp(','), '.')),
+              fibra_cruda:
+                  double.parse("${item[7]}".replaceFirst(RegExp(','), '.')),
+              ms: double.parse("${item[8]}".replaceFirst(RegExp(','), '.')),
+              numero: int.parse("${item[9]}"),
+              raza: item[10],
+            ))
+        .toList();
+    // Inserta los toros en la base de datos
+    for (BullRequirementsModel bull in listBulls) {
+      bullReqDao.insert(bull);
+    }
   }
 }
