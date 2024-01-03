@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:foodoptima/application/routes/app_router.dart';
 import 'package:foodoptima/db/dao/requirement_dao.dart';
 import 'package:foodoptima/providers/food_provider.dart';
+import 'package:foodoptima/widgets/requirements_data_search.dart';
 import 'package:foodoptima/widgets/requirements_data_table.dart';
 import 'package:foodoptima/models/requirement_model.dart';
 import 'package:go_router/go_router.dart';
@@ -116,6 +117,36 @@ class _RequirementsScreenState extends State<RequirementsScreen> {
                     ? requerimientosToros
                     : requerimientosVacas,
                 selectedRequirements),
+            actions: [
+              IconButton(
+                  onPressed: () async {
+                    if (widget.requirementsFor == 'bulls') {
+                      final BullRequirementsModel? resultBulls =
+                          await showSearch(
+                              context: context,
+                              delegate:
+                                  RequirementsDataSearch(requerimientosToros));
+
+                      if (resultBulls != null) {
+                        setState(() {
+                          selectedRequirements.add(resultBulls);
+                        });
+                      }
+                    } else if (widget.requirementsFor == 'cows') {
+                      final CowRequirementsModel? resultCows = await showSearch(
+                          context: context,
+                          delegate:
+                              RequirementsDataSearch(requerimientosVacas));
+
+                      if (resultCows != null) {
+                        setState(() {
+                          selectedRequirements.add(resultCows);
+                        });
+                      }
+                    }
+                  },
+                  icon: const Icon(Icons.search))
+            ],
           ),
         ],
       ),
