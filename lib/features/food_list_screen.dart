@@ -17,8 +17,8 @@ class FoodListScreen extends StatefulWidget {
 }
 
 class _FoodListScreenState extends State<FoodListScreen> {
-  List<FoodModel> alimentos = [];
-  List<FoodModel> selectedAlimentos = [];
+  List<FoodModel> foods = [];
+  List<FoodModel> selectedFoods = [];
   final columns = [
     'Alimentos',
     'Materia Seca',
@@ -29,13 +29,13 @@ class _FoodListScreenState extends State<FoodListScreen> {
   @override
   void initState() {
     super.initState();
-    _fetchAlimentos();
+    _getFood();
   }
 
-  Future<void> _fetchAlimentos() async {
+  Future<void> _getFood() async {
     final foodDao = FoodDao();
     try {
-      alimentos = await foodDao.getAll();
+      foods = await foodDao.getAll();
       setState(() {}); // Update the UI
     } catch (error) {
       // Handle database errors
@@ -69,7 +69,7 @@ class _FoodListScreenState extends State<FoodListScreen> {
               onPressed: () {
                 context.pushNamed(RouteNames.addFood).then((value) => setState(
                       () {
-                        _fetchAlimentos();
+                        _getFood();
                       },
                     ));
               },
@@ -84,7 +84,7 @@ class _FoodListScreenState extends State<FoodListScreen> {
           PaginatedDataTable(
             columns: getColumns(columns),
             rowsPerPage: 12,
-            source: AlimentosDataSource(alimentos, selectedAlimentos),
+            source: FoodDataSource(foods, selectedFoods),
             header: const Text("Alimentos"),
             actions: [
               IconButton(
@@ -92,11 +92,11 @@ class _FoodListScreenState extends State<FoodListScreen> {
                 onPressed: () async {
                   final FoodModel? result = await showSearch<FoodModel>(
                     context: context,
-                    delegate: DataSearch(alimentos),
+                    delegate: DataSearch(foods),
                   );
                   if (result != null) {
                     setState(() {
-                      selectedAlimentos.add(result);
+                      selectedFoods.add(result);
                     });
                   }
                 },
@@ -130,7 +130,7 @@ class _FoodListScreenState extends State<FoodListScreen> {
           } else if (index == 1) {
             context
                 .read<FoodProvider>()
-                .changeFoodList(newFoodList: selectedAlimentos);
+                .changeFoodList(newFoodList: selectedFoods);
             context.pushNamed(RouteNames.restrictions);
           }
         },

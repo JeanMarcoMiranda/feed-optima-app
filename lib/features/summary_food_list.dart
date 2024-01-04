@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:foodoptima/models/food_model.dart';
 import 'package:foodoptima/providers/food_provider.dart';
@@ -19,12 +18,12 @@ class SummaryFoodScreen extends StatefulWidget {
 }
 
 class _SummaryFoodState extends State<SummaryFoodScreen> {
-  double _cantidadTotal = 0;
-  double _costeTotal = 0;
+  double _totalQuantity = 0;
+  double _totalCost = 0;
 
   @override
   Widget build(BuildContext context) {
-    final List<FoodModel> alimentos = context.watch<FoodProvider>().foodList;
+    final List<FoodModel> foods = context.watch<FoodProvider>().foodList;
 
     return Scaffold(
       appBar: AppBar(
@@ -77,7 +76,7 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
                             child: const Text('Guardar'),
                             onPressed: () {
                               // Guarda el documento PDF con el name especificado por el usuario
-                              guardarEnPDF(nameFileController.text, alimentos);
+                              _saveToPDF(nameFileController.text, foods);
                               Navigator.pop(context);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
@@ -128,11 +127,11 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
               onChanged: (value) {
                 if (value.isEmpty) {
                   setState(() {
-                    _restablecerLista(alimentos);
+                    _resetList(foods);
                   });
                 } else {
                   setState(() {
-                    _actualizarLista(double.parse(value), alimentos);
+                    _updateList(double.parse(value), foods);
                   });
                 }
               },
@@ -140,21 +139,41 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
           ),
           Expanded(
             child: ListView.separated(
-              itemCount: alimentos.length,
+              itemCount: foods.length,
               itemBuilder: (context, index) {
-                final alimento = alimentos[index];
+                final food = foods[index];
                 return ListTile(
                   title: Text(
-                    alimento.name,
+                    food.name,
                     style: const TextStyle(fontSize: 20),
                   ),
                   subtitle: Text(
-                    'Cantidad: ${alimento.quantity} kg',
-                    style: const TextStyle(fontSize: 15),
+                    'Cantidad: ${food.quantity} kg',
+                    style: const TextStyle(fontSize: 15, color: Colors.grey),
                   ),
-                  trailing: Text(
-                    'Costo: S/.${alimento.cost}',
-                    style: const TextStyle(fontSize: 14),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Costo x Unidad: S/.${food.unitCost}',
+                            style: const TextStyle(
+                                fontSize: 14, color: Colors.blue),
+                          ),
+                          Text(
+                            'Costo: S/.${food.cost}',
+                            style: const TextStyle(
+                                fontSize: 14, color: Colors.green),
+                          ),
+                        ],
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.edit),
+                        onPressed: () => _editUnitCost(food, foods),
+                      ),
+                    ],
                   ),
                 );
               },
@@ -179,7 +198,7 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text(
-                  'Cantidad total: $_cantidadTotal kg',
+                  'Cantidad total: $_totalQuantity kg',
                   style: const TextStyle(
                     fontSize: 15,
                   ),
@@ -191,7 +210,7 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
                   ),
                 ),
                 Text(
-                  'Coste total: S/.$_costeTotal',
+                  'Coste total: S/.$_totalCost',
                   style: const TextStyle(
                     fontSize: 15,
                   ),
@@ -204,37 +223,40 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
     );
   }
 
-  void _restablecerLista(List<FoodModel> alimentos) {
+  void _resetList(List<FoodModel> foods) {
     //arreglar, la quantity por defecto que se envía es 0
     //o 1 para el precio unitario desde el main.dart
-    for (final alimento in alimentos) {
-      alimento.quantity = 1;
-      alimento.cost = alimento.unitCost;
+    for (final food in foods) {
+      food.quantity = 1;
+      food.cost = food.unitCost;
     }
-    _cantidadTotal = 0;
-    _costeTotal = 0;
+    _totalQuantity = 0;
+    _totalCost = 0;
   }
 
-  void _actualizarLista(double cantidadTotal, List<FoodModel> alimentos) {
-    // Actualiza la quantity y cost de cada alimento y totales
-    for (final alimento in alimentos) {
-      alimento.quantity = cantidadTotal / alimentos.length;
-      alimento.quantity = double.parse(alimento.quantity!.toStringAsFixed(2));
+  void _updateList(double totalQuantity, List<FoodModel> foods) {
+    // Actualiza la quantity y cost de cada food y totales
+    for (final food in foods) {
+      food.quantity = totalQuantity / foods.length;
+      food.quantity = double.parse(food.quantity!.toStringAsFixed(2));
 
       // Actualiza el cost de cada producto
-      alimento.cost = (alimento.unitCost! * alimento.quantity!);
-      alimento.cost = double.parse(alimento.cost!.toStringAsFixed(2));
+      food.cost = (food.unitCost! * food.quantity!);
+      food.cost = double.parse(food.cost!.toStringAsFixed(2));
     }
-    _cantidadTotal = cantidadTotal;
-    _costeTotal = 0;
-
-    for (final alimento in alimentos) {
-      _costeTotal += alimento.quantity! * alimento.unitCost!;
-    }
-    _costeTotal = double.parse(_costeTotal.toStringAsFixed(2));
+    _totalQuantity = totalQuantity;
+    _calculateTotalCost(foods);
   }
 
-  Future<void> guardarEnPDF(String name, List<FoodModel> alimentos) async {
+  void _calculateTotalCost(List<FoodModel> foods) {
+    _totalCost = 0;
+    for (final food in foods) {
+      _totalCost += food.quantity! * food.unitCost!;
+    }
+    _totalCost = double.parse(_totalCost.toStringAsFixed(2));
+  }
+
+  Future<void> _saveToPDF(String name, List<FoodModel> foods) async {
     // Crea un documento PDF
     final pdf = pw.Document(version: PdfVersion.pdf_1_5, compress: true);
     final creationDate = DateTime.now();
@@ -252,7 +274,7 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
               mainAxisAlignment: pw.MainAxisAlignment.center,
               children: [
                 pw.Text(
-                  'Lista de alimentos',
+                  'Lista de foods',
                   style: const pw.TextStyle(fontSize: 30),
                 ),
                 pw.SizedBox(
@@ -266,7 +288,7 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
                   height: 10,
                 ),
                 pw.Text(
-                  'Esta lista de alimentos es solo una guía. Es importante consultar con un profesional de la salud para obtener recomendaciones específicas para sus necesidades individuales.',
+                  'Esta lista de foods es solo una guía. Es importante consultar con un profesional de la salud para obtener recomendaciones específicas para sus necesidades individuales.',
                   style: const pw.TextStyle(fontSize: 12),
                 ),
               ],
@@ -293,21 +315,29 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
                   crossAxisAlignment: pw.CrossAxisAlignment.center,
                   mainAxisAlignment: pw.MainAxisAlignment.center,
                   children: [pw.Text("COSTO")]),
+              pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.center,
+                  mainAxisAlignment: pw.MainAxisAlignment.center,
+                  children: [pw.Text("COSTO UNITARIO")]),
             ]),
-            for (final alimento in alimentos)
+            for (final food in foods)
               pw.TableRow(children: [
                 pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.center,
                     mainAxisAlignment: pw.MainAxisAlignment.center,
-                    children: [pw.Text(alimento.name)]),
+                    children: [pw.Text(food.name)]),
                 pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.center,
                     mainAxisAlignment: pw.MainAxisAlignment.center,
-                    children: [pw.Text("${alimento.quantity.toString()} kg")]),
+                    children: [pw.Text("${food.quantity.toString()} kg")]),
                 pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.center,
                     mainAxisAlignment: pw.MainAxisAlignment.center,
-                    children: [pw.Text("S/. ${alimento.cost.toString()}")]),
+                    children: [pw.Text("S/. ${food.cost.toString()}")]),
+                pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.center,
+                    mainAxisAlignment: pw.MainAxisAlignment.center,
+                    children: [pw.Text("S/. ${food.unitCost.toString()}")]),
               ]),
             pw.TableRow(children: [
               pw.Column(
@@ -317,11 +347,11 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
               pw.Column(
                   crossAxisAlignment: pw.CrossAxisAlignment.center,
                   mainAxisAlignment: pw.MainAxisAlignment.center,
-                  children: [pw.Text("$_cantidadTotal kg")]),
+                  children: [pw.Text("$_totalQuantity kg")]),
               pw.Column(
                   crossAxisAlignment: pw.CrossAxisAlignment.center,
                   mainAxisAlignment: pw.MainAxisAlignment.center,
-                  children: [pw.Text("S/. $_costeTotal")]),
+                  children: [pw.Text("S/. $_totalCost")]),
             ]),
           ]);
         }));
@@ -332,5 +362,47 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
     if (!await file.exists()) {
       await file.writeAsBytes(await pdf.save());
     }
+  }
+
+  void _editUnitCost(FoodModel food, List<FoodModel> foods) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        final TextEditingController costController =
+            TextEditingController(text: food.unitCost.toString());
+        return AlertDialog(
+          title: const Text('Editar Costo Unitario'),
+          content: TextField(
+            controller: costController,
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(
+              labelText: 'Costo Unitario',
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: const Text('Cancelar'),
+              onPressed: () => Navigator.pop(context),
+            ),
+            TextButton(
+              child: const Text('Guardar'),
+              onPressed: () {
+                if (costController.text.isEmpty) {
+                  // El valor está vacío
+                  food.unitCost = 0;
+                } else {
+                  // El valor no está vacío
+                  food.unitCost = double.parse(costController.text);
+                }
+                food.cost = food.unitCost! * food.quantity!;
+                _calculateTotalCost(foods);
+                setState(() {});
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

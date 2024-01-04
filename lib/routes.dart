@@ -6,7 +6,6 @@ import 'package:foodoptima/features/previous_lists_screen.dart';
 import 'package:foodoptima/features/requirements_screen.dart';
 import 'package:foodoptima/features/restrictions_screen.dart';
 import 'package:foodoptima/features/summary_food_list.dart';
-import 'package:foodoptima/models/food_model.dart';
 import 'package:go_router/go_router.dart';
 
 final GoRouter router = GoRouter(routes: [

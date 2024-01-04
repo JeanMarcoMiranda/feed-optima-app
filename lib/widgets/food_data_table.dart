@@ -1,30 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:foodoptima/models/food_model.dart';
 
-class AlimentosDataSource extends DataTableSource {
-  final List<FoodModel> _alimentos;
-  final List<FoodModel> _selectedAlimentos;
+class FoodDataSource extends DataTableSource {
+  final List<FoodModel> _foods;
+  final List<FoodModel> _selectedFoods;
 
-  AlimentosDataSource(this._alimentos, this._selectedAlimentos);
+  FoodDataSource(this._foods, this._selectedFoods);
 
   @override
   DataRow? getRow(int index) {
-    if (index < _alimentos.length) {
-      final alimento = _alimentos[index];
+    if (index < _foods.length) {
+      final food = _foods[index];
+      // final cells = [
+      //   food.name,
+      //   food.dryMatter,
+      //   food.totalProtein,
+      //   food.netEnergyG,
+      //   food.metabolizableEnergy,
+      //   food.ndt,
+      //   food.calcium,
+      //   food.phosphorus,
+      //   food.crudeFiber,
+      //   food.fdn,
+      //   food.vitaminA,
+      //   food.vitaminD,
+      //   food.unitCost
+      // ];
       final cells = [
-        alimento.name,
-        alimento.dryMatter,
-        alimento.totalProtein,
-        alimento.metabolizableEnergy
+        food.name,
+        food.dryMatter,
+        food.totalProtein,
+        food.metabolizableEnergy
       ];
       return DataRow.byIndex(
         index: index,
-        selected: _selectedAlimentos.contains(alimento),
+        selected: _selectedFoods.contains(food),
         onSelectChanged: (bool? selected) {
           if (selected != null && selected) {
-            _selectedAlimentos.add(alimento);
+            _selectedFoods.add(food);
           } else {
-            _selectedAlimentos.remove(alimento);
+            _selectedFoods.remove(food);
           }
           notifyListeners();
         },
@@ -42,8 +57,8 @@ class AlimentosDataSource extends DataTableSource {
   bool get isRowCountApproximate => false;
 
   @override
-  int get rowCount => _alimentos.length;
+  int get rowCount => _foods.length;
 
   @override
-  int get selectedRowCount => _selectedAlimentos.length;
+  int get selectedRowCount => _selectedFoods.length;
 }
