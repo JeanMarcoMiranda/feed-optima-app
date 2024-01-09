@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodoptima/application/routes/app_router.dart';
 import 'package:foodoptima/db/data/loadDataFromExcel.dart';
+import 'package:foodoptima/widgets/appbar_widget.dart';
 import 'package:foodoptima/widgets/card_widget.dart';
 import 'package:go_router/go_router.dart';
 
@@ -23,59 +24,55 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Center(
-          child: Text(
-            'Food Optima',
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
-          ),
-        ),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(15),
-          ),
-        ),
-        leading: Container(),
-        actions: [
-          IconButton(
-            onPressed: () {
-              context.pushNamed(RouteNames.previousLists);
-            },
-            icon: const Icon(
-              Icons.list_alt_outlined,
-              color: Colors.white,
-            ),
-          )
-        ],
-      ),
-      body: Center(
+      body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            GestureDetector(
-              onTap: () {
-                context.pushNamed(RouteNames.requirements,
-                    queryParameters: {'for': 'bulls'});
-              },
-              child: const CardWidget(
-                cardText: "Toro",
-                imgURL:
-                    "https://lasventastour.com/wp-content/uploads/2020/01/Toro-Bravo-Las-Ventas-Tour-2.png",
+            CustomAppBar(
+              title: "Food Optima",
+              fontSize: 25,
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    context.pushNamed(RouteNames.previousLists);
+                  },
+                  icon: const Icon(
+                    Icons.list_alt_outlined,
+                  ),
+                )
+              ],
+            ),
+            Expanded(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        context.pushNamed(RouteNames.requirements,
+                            queryParameters: {'for': 'bulls'});
+                      },
+                      child: const CardWidget(
+                        cardText: "Toro",
+                        imgURL:
+                            "https://lasventastour.com/wp-content/uploads/2020/01/Toro-Bravo-Las-Ventas-Tour-2.png",
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    GestureDetector(
+                      onTap: () {
+                        context.pushNamed(RouteNames.requirements,
+                            queryParameters: {'for': 'cows'});
+                      },
+                      child: const CardWidget(
+                        cardText: "Vaca",
+                        imgURL:
+                            "https://taxonomiaanimal.files.wordpress.com/2018/03/vaca.png",
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
-            const SizedBox(height: 30),
-            GestureDetector(
-              onTap: () {
-                context.pushNamed(RouteNames.requirements,
-                    queryParameters: {'for': 'cows'});
-              },
-              child: const CardWidget(
-                cardText: "Vaca",
-                imgURL:
-                    "https://taxonomiaanimal.files.wordpress.com/2018/03/vaca.png",
-              ),
-            )
           ],
         ),
       ),

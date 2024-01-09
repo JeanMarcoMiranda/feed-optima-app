@@ -6,8 +6,9 @@ class AppTheme {
     return ThemeData(
         useMaterial3: true,
         colorSchemeSeed: Colors.green,
-        appBarTheme: const AppBarTheme(
+        /*appBarTheme: const AppBarTheme(
             backgroundColor: Color.fromARGB(255, 106, 208, 80)),
+        */
         textTheme: GoogleFonts.latoTextTheme());
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:foodoptima/application/routes/app_router.dart';
 import 'package:foodoptima/db/dao/requirement_dao.dart';
 import 'package:foodoptima/providers/food_provider.dart';
+import 'package:foodoptima/widgets/appbar_widget.dart';
 import 'package:foodoptima/widgets/requirements_data_search.dart';
 import 'package:foodoptima/widgets/requirements_data_table.dart';
 import 'package:foodoptima/models/requirement_model.dart';
@@ -87,68 +88,63 @@ class _RequirementsScreenState extends State<RequirementsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: const Text(
-          'Requerimientos',
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
-      ),
-      body: ListView(
-        children: [
-          PaginatedDataTable(
-            columns: getColumns(
-                widget.requirementsFor == 'bulls' ? bullsColumns : cowsColumns),
-            rowsPerPage: 11,
-            header: Text(
-                "Requerimientos en ${widget.requirementsFor == 'bulls' ? 'Toros' : 'Vacas'}"),
-            source: RequerimientosDataSource(
-                widget.requirementsFor == 'bulls'
-                    ? requerimientosToros
-                    : requerimientosVacas,
-                selectedRequirements),
-            actions: [
-              IconButton(
-                  onPressed: () async {
-                    if (widget.requirementsFor == 'bulls') {
-                      final BullRequirementsModel? resultBulls =
-                          await showSearch(
-                              context: context,
-                              delegate:
-                                  RequirementsDataSearch(requerimientosToros));
+      body: SafeArea(
+        child: Column(
+          children: [
+            CustomAppBar(
+              title:
+                  "Requerimientos en ${widget.requirementsFor == 'bulls' ? 'Toros' : 'Vacas'}",
+              actions: [
+                IconButton(
+                    onPressed: () async {
+                      if (widget.requirementsFor == 'bulls') {
+                        final BullRequirementsModel? resultBulls =
+                            await showSearch(
+                                context: context,
+                                delegate: RequirementsDataSearch(
+                                    requerimientosToros));
 
-                      if (resultBulls != null) {
-                        setState(() {
-                          selectedRequirements.add(resultBulls);
-                        });
-                      }
-                    } else if (widget.requirementsFor == 'cows') {
-                      final CowRequirementsModel? resultCows = await showSearch(
-                          context: context,
-                          delegate:
-                              RequirementsDataSearch(requerimientosVacas));
+                        if (resultBulls != null) {
+                          setState(() {
+                            selectedRequirements.add(resultBulls);
+                          });
+                        }
+                      } else if (widget.requirementsFor == 'cows') {
+                        final CowRequirementsModel? resultCows =
+                            await showSearch(
+                                context: context,
+                                delegate: RequirementsDataSearch(
+                                    requerimientosVacas));
 
-                      if (resultCows != null) {
-                        setState(() {
-                          selectedRequirements.add(resultCows);
-                        });
+                        if (resultCows != null) {
+                          setState(() {
+                            selectedRequirements.add(resultCows);
+                          });
+                        }
                       }
-                    }
-                  },
-                  icon: const Icon(Icons.search))
-            ],
-          ),
-        ],
+                    },
+                    icon: const Icon(Icons.search))
+              ],
+            ),
+            Expanded(
+              child: ListView(
+                children: [
+                  PaginatedDataTable(
+                    columns: getColumns(widget.requirementsFor == 'bulls'
+                        ? bullsColumns
+                        : cowsColumns),
+                    rowsPerPage: 13,
+                    source: RequerimientosDataSource(
+                        widget.requirementsFor == 'bulls'
+                            ? requerimientosToros
+                            : requerimientosVacas,
+                        selectedRequirements),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         unselectedItemColor: Colors.black45,

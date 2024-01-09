@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodoptima/models/previous_list_state.dart';
+import 'package:foodoptima/widgets/appbar_widget.dart';
 
 class PreviousListsScreen extends StatefulWidget {
   const PreviousListsScreen({super.key});
@@ -26,32 +27,13 @@ class _PreviousListsScreenState extends State<PreviousListsScreen> {
             child: Padding(
           padding: const EdgeInsets.all(12),
           child: Column(children: [
-            Row(
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.arrow_back_ios_new),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                )
-              ],
+            CustomAppBar(
+              title: 'Listas Previas',
+              fontSize: 25,
+              activeGoBack: true,
             ),
             const SizedBox(
               height: 10,
-            ),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(left: 12),
-                  child: Text(
-                    "Listas Previas",
-                    style: TextStyle(
-                      fontSize: 24,
-                    ),
-                  ),
-                ),
-              ],
             ),
             Expanded(
               child: ListView(
