@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodoptima/db/dao/food_dao.dart';
 import 'package:foodoptima/models/food_model.dart';
+import 'package:foodoptima/widgets/appbar_widget.dart';
 
 class AddFoodScreen extends StatefulWidget {
   const AddFoodScreen({super.key});
@@ -120,137 +121,150 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: const Center(
-            child: Text(
-          'Add food screen',
-          style: TextStyle(color: Colors.white),
-        )),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                _buildTextFormField(
-                  labelText: 'Alimento',
-                  hintText: 'Nombre del Alimento',
-                  onSaved: (value) => _foodName = value!,
-                  onChanged: (text) => _foodName = text!,
-                ),
-                _buildTextFormField(
-                  labelText: 'Materia Seca',
-                  hintText: 'Materia Seca en %',
-                  keyboardType: TextInputType.number,
-                  onSaved: (dynamic value) =>
-                      _dryMatter = parseDoubleOrZero(value),
-                  onChanged: (text) => _dryMatter = parseDoubleOrZero(text),
-                ),
-                _buildTextFormField(
-                  labelText: 'Proteína Total',
-                  hintText: 'Proteína Total en %',
-                  keyboardType: TextInputType.number,
-                  onSaved: (value) => _crudeProtein = parseDoubleOrZero(value),
-                  onChanged: (text) => _crudeProtein = parseDoubleOrZero(text),
-                ),
-                _buildTextFormField(
-                  labelText: 'Energía Neta G. Mcal/Kg',
-                  hintText: 'Energía Neta G. en Mcal/Kg',
-                  keyboardType: TextInputType.number,
-                  onSaved: (value) =>
-                      _netEnergyGMcalKg = parseDoubleOrZero(value),
-                  onChanged: (text) =>
-                      _netEnergyGMcalKg = parseDoubleOrZero(text),
-                ),
-                _buildTextFormField(
-                  labelText: 'Energía Metab. Mcal/Kg',
-                  hintText: 'Energía Metab. en Mcal/Kg',
-                  keyboardType: TextInputType.number,
-                  onSaved: (value) =>
-                      _metabolicEnergyMcalKg = parseDoubleOrZero(value),
-                  onChanged: (text) =>
-                      _metabolicEnergyMcalKg = parseDoubleOrZero(text),
-                ),
-                _buildTextFormField(
-                  labelText: 'NDT',
-                  hintText: 'NDT en %',
-                  keyboardType: TextInputType.number,
-                  onSaved: (value) => _ndt = parseDoubleOrZero(value),
-                  onChanged: (text) => _ndt = parseDoubleOrZero(text),
-                ),
-                _buildTextFormField(
-                  labelText: 'Calcio',
-                  hintText: 'Calcio en %',
-                  keyboardType: TextInputType.number,
-                  onSaved: (value) => _calcium = parseDoubleOrZero(value),
-                  onChanged: (text) => _calcium = parseDoubleOrZero(text),
-                ),
-                _buildTextFormField(
-                  labelText: 'Fósforo',
-                  hintText: 'Fósforo en %',
-                  keyboardType: TextInputType.number,
-                  onSaved: (value) => _phosphorus = parseDoubleOrZero(value),
-                  onChanged: (text) => _phosphorus = parseDoubleOrZero(text),
-                ),
-                _buildTextFormField(
-                  labelText: 'Fibra Cruda',
-                  hintText: 'Fibra Cruda en %',
-                  keyboardType: TextInputType.number,
-                  onSaved: (value) => _crudeFiber = parseDoubleOrZero(value),
-                  onChanged: (text) => _crudeFiber = parseDoubleOrZero(text),
-                ),
-                _buildTextFormField(
-                  labelText: 'FDN',
-                  hintText: 'FDN en %',
-                  keyboardType: TextInputType.number,
-                  onSaved: (value) => _fdn = parseDoubleOrZero(value),
-                  onChanged: (text) => _fdn = parseDoubleOrZero(text),
-                ),
-                _buildTextFormField(
-                  labelText: 'Vit. A',
-                  hintText: 'Vitamina A en 1000 UI',
-                  keyboardType: TextInputType.number,
-                  onSaved: (value) => _vitaminA = parseDoubleOrZero(value),
-                  onChanged: (text) => _vitaminA = parseDoubleOrZero(text),
-                ),
-                _buildTextFormField(
-                  labelText: 'Vit. D',
-                  hintText: 'Vitamina D en 1000 UI',
-                  keyboardType: TextInputType.number,
-                  onSaved: (value) => _vitaminD = parseDoubleOrZero(value),
-                  onChanged: (text) => _vitaminD = parseDoubleOrZero(text),
-                ),
-                _buildTextFormField(
-                  labelText: 'Costo Unitario',
-                  hintText: 'Costo en soles S/.',
-                  keyboardType: TextInputType.number,
-                  onSaved: (value) => _unitCost = parseDoubleOrZero(value),
-                  onChanged: (text) => _unitCost = parseDoubleOrZero(text),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                ElevatedButton(
-                  onPressed: _handleFormSubmit,
-                  child: const Text('Agregar Alimento'),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-              ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            const CustomAppBar(
+              title: "Anadir nuevo alimento",
+              activeGoBack: true,
+              fontSize: 25,
             ),
-          ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        _buildTextFormField(
+                          labelText: 'Alimento',
+                          hintText: 'Nombre del Alimento',
+                          onSaved: (value) => _foodName = value!,
+                          onChanged: (text) => _foodName = text!,
+                        ),
+                        _buildTextFormField(
+                          labelText: 'Materia Seca',
+                          hintText: 'Materia Seca en %',
+                          keyboardType: TextInputType.number,
+                          onSaved: (dynamic value) =>
+                              _dryMatter = parseDoubleOrZero(value),
+                          onChanged: (text) =>
+                              _dryMatter = parseDoubleOrZero(text),
+                        ),
+                        _buildTextFormField(
+                          labelText: 'Proteína Total',
+                          hintText: 'Proteína Total en %',
+                          keyboardType: TextInputType.number,
+                          onSaved: (value) =>
+                              _crudeProtein = parseDoubleOrZero(value),
+                          onChanged: (text) =>
+                              _crudeProtein = parseDoubleOrZero(text),
+                        ),
+                        _buildTextFormField(
+                          labelText: 'Energía Neta G. Mcal/Kg',
+                          hintText: 'Energía Neta G. en Mcal/Kg',
+                          keyboardType: TextInputType.number,
+                          onSaved: (value) =>
+                              _netEnergyGMcalKg = parseDoubleOrZero(value),
+                          onChanged: (text) =>
+                              _netEnergyGMcalKg = parseDoubleOrZero(text),
+                        ),
+                        _buildTextFormField(
+                          labelText: 'Energía Metab. Mcal/Kg',
+                          hintText: 'Energía Metab. en Mcal/Kg',
+                          keyboardType: TextInputType.number,
+                          onSaved: (value) =>
+                              _metabolicEnergyMcalKg = parseDoubleOrZero(value),
+                          onChanged: (text) =>
+                              _metabolicEnergyMcalKg = parseDoubleOrZero(text),
+                        ),
+                        _buildTextFormField(
+                          labelText: 'NDT',
+                          hintText: 'NDT en %',
+                          keyboardType: TextInputType.number,
+                          onSaved: (value) => _ndt = parseDoubleOrZero(value),
+                          onChanged: (text) => _ndt = parseDoubleOrZero(text),
+                        ),
+                        _buildTextFormField(
+                          labelText: 'Calcio',
+                          hintText: 'Calcio en %',
+                          keyboardType: TextInputType.number,
+                          onSaved: (value) =>
+                              _calcium = parseDoubleOrZero(value),
+                          onChanged: (text) =>
+                              _calcium = parseDoubleOrZero(text),
+                        ),
+                        _buildTextFormField(
+                          labelText: 'Fósforo',
+                          hintText: 'Fósforo en %',
+                          keyboardType: TextInputType.number,
+                          onSaved: (value) =>
+                              _phosphorus = parseDoubleOrZero(value),
+                          onChanged: (text) =>
+                              _phosphorus = parseDoubleOrZero(text),
+                        ),
+                        _buildTextFormField(
+                          labelText: 'Fibra Cruda',
+                          hintText: 'Fibra Cruda en %',
+                          keyboardType: TextInputType.number,
+                          onSaved: (value) =>
+                              _crudeFiber = parseDoubleOrZero(value),
+                          onChanged: (text) =>
+                              _crudeFiber = parseDoubleOrZero(text),
+                        ),
+                        _buildTextFormField(
+                          labelText: 'FDN',
+                          hintText: 'FDN en %',
+                          keyboardType: TextInputType.number,
+                          onSaved: (value) => _fdn = parseDoubleOrZero(value),
+                          onChanged: (text) => _fdn = parseDoubleOrZero(text),
+                        ),
+                        _buildTextFormField(
+                          labelText: 'Vit. A',
+                          hintText: 'Vitamina A en 1000 UI',
+                          keyboardType: TextInputType.number,
+                          onSaved: (value) =>
+                              _vitaminA = parseDoubleOrZero(value),
+                          onChanged: (text) =>
+                              _vitaminA = parseDoubleOrZero(text),
+                        ),
+                        _buildTextFormField(
+                          labelText: 'Vit. D',
+                          hintText: 'Vitamina D en 1000 UI',
+                          keyboardType: TextInputType.number,
+                          onSaved: (value) =>
+                              _vitaminD = parseDoubleOrZero(value),
+                          onChanged: (text) =>
+                              _vitaminD = parseDoubleOrZero(text),
+                        ),
+                        _buildTextFormField(
+                          labelText: 'Costo Unitario',
+                          hintText: 'Costo en soles S/.',
+                          keyboardType: TextInputType.number,
+                          onSaved: (value) =>
+                              _unitCost = parseDoubleOrZero(value),
+                          onChanged: (text) =>
+                              _unitCost = parseDoubleOrZero(text),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        ElevatedButton(
+                          onPressed: _handleFormSubmit,
+                          child: const Text('Agregar Alimento'),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

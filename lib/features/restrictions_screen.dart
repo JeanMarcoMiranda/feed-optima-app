@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:foodoptima/models/restriction_model.dart';
 import 'package:foodoptima/application/routes/app_router.dart';
+import 'package:foodoptima/widgets/appbar_widget.dart';
 import 'package:go_router/go_router.dart';
 
 class RestrictionsScreen extends StatefulWidget {
@@ -43,42 +44,20 @@ class _RestrictionsScreenState extends State<RestrictionsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: const Center(
-            child: Text(
-          'Restrictions screen',
-          style: TextStyle(color: Colors.white),
-        )),
-      ),
-      body: Column(
-        children: [
-          const Row(
-            children: [
-              Padding(
-                padding: EdgeInsets.all(20),
-                child: Text(
-                  "Alimentos",
-                  style: TextStyle(fontSize: 22),
-                  textAlign: TextAlign.left,
-                ),
-              ),
-            ],
-          ),
-          Expanded(
-            child: ListView(
-              children: [...restrictions.map(restrictionsListItem)],
+      body: SafeArea(
+        child: Column(
+          children: [
+            CustomAppBar(
+              title: "Lista de Restricciones",
+              fontSize: 25,
             ),
-          ),
-        ],
+            Expanded(
+              child: ListView(
+                children: [...restrictions.map(restrictionsListItem)],
+              ),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         unselectedItemColor: Colors.black45,

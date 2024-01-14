@@ -5,6 +5,7 @@ import 'package:foodoptima/db/dao/food_dao.dart';
 import 'package:foodoptima/models/food_model.dart';
 import 'package:foodoptima/application/routes/app_router.dart';
 import 'package:foodoptima/providers/food_provider.dart';
+import 'package:foodoptima/widgets/appbar_widget.dart';
 import 'package:foodoptima/widgets/food_data_search.dart';
 import 'package:foodoptima/widgets/food_data_table.dart';
 import 'package:go_router/go_router.dart';
@@ -49,61 +50,54 @@ class _FoodListScreenState extends State<FoodListScreen> {
     log("${context.watch<FoodProvider>().requirementsList}");
 
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: const Center(
-            child: Text(
-          'Food List Screen',
-          style: TextStyle(color: Colors.white),
-        )),
-        actions: [
-          IconButton(
-              onPressed: () {
-                context.pushNamed(RouteNames.addFood).then((value) => setState(
-                      () {
-                        _getFood();
-                      },
-                    ));
-              },
-              icon: const Icon(
-                Icons.add,
-                color: Colors.white,
-              ))
-        ],
-      ),
-      body: Center(
-        child: ListView(padding: const EdgeInsets.all(0.0), children: [
-          PaginatedDataTable(
-            columns: getColumns(columns),
-            rowsPerPage: 12,
-            source: FoodDataSource(foods, selectedFoods),
-            header: const Text("Alimentos"),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.search),
-                onPressed: () async {
-                  final FoodModel? result = await showSearch<FoodModel>(
-                    context: context,
-                    delegate: DataSearch(foods),
-                  );
-                  if (result != null) {
-                    setState(() {
-                      selectedFoods.add(result);
-                    });
-                  }
-                },
+      body: SafeArea(
+        child: Column(
+          children: [
+            CustomAppBar(
+              title: "Lista de Alimentos",
+              actions: [
+                IconButton(
+                    onPressed: () {
+                      context
+                          .pushNamed(RouteNames.addFood)
+                          .then((value) => setState(
+                                () {
+                                  _getFood();
+                                },
+                              ));
+                    },
+                    icon: const Icon(
+                      Icons.add,
+                    )),
+                IconButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: () async {
+                    final FoodModel? result = await showSearch<FoodModel>(
+                      context: context,
+                      delegate: DataSearch(foods),
+                    );
+                    if (result != null) {
+                      setState(() {
+                        selectedFoods.add(result);
+                      });
+                    }
+                  },
+                ),
+              ],
+            ),
+            Expanded(
+              child: Center(
+                child: ListView(padding: const EdgeInsets.all(0.0), children: [
+                  PaginatedDataTable(
+                    columns: getColumns(columns),
+                    rowsPerPage: 12,
+                    source: FoodDataSource(foods, selectedFoods),
+                  ),
+                ]),
               ),
-            ],
-          ),
-        ]),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         unselectedItemColor: Colors.black45,
