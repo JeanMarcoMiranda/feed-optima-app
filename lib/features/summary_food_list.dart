@@ -254,7 +254,7 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
     //o 1 para el precio unitario desde el main.dart
     for (final food in foods) {
       food.quantity = 1;
-      food.cost = double.parse(food.unitCost!.toStringAsFixed(2));
+      food.cost = double.parse(food.unitCost.toStringAsFixed(2));
     }
     _totalQuantity = 0;
     _totalCost = 0;
@@ -264,11 +264,11 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
     // Actualiza la quantity y cost de cada food y totales
     for (final food in foods) {
       food.quantity = totalQuantity / foods.length;
-      food.quantity = double.parse(food.quantity!.toStringAsFixed(2));
+      food.quantity = double.parse(food.quantity.toStringAsFixed(2));
 
       // Actualiza el cost de cada producto
-      food.cost = (food.unitCost! * food.quantity!);
-      food.cost = double.parse(food.cost!.toStringAsFixed(2));
+      food.cost = (food.unitCost * food.quantity);
+      food.cost = double.parse(food.cost.toStringAsFixed(2));
     }
     _totalQuantity = totalQuantity;
     _calculateTotalCost(foods);
@@ -277,7 +277,7 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
   void _calculateTotalCost(List<FoodModel> foods) {
     _totalCost = 0;
     for (final food in foods) {
-      _totalCost += food.quantity! * food.unitCost!;
+      _totalCost += food.quantity * food.unitCost;
     }
     _totalCost = double.parse(_totalCost.toStringAsFixed(2));
   }
@@ -391,9 +391,9 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
   }
 
   void _editUnitCost(
-      BuildContext _context, FoodModel food, List<FoodModel> foods) {
+      BuildContext context, FoodModel food, List<FoodModel> foods) {
     showDialog(
-      context: _context,
+      context: context,
       builder: (context) {
         final TextEditingController costController =
             TextEditingController(text: food.unitCost.toString());
@@ -461,12 +461,6 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
     }
 
     for (final food in foods) {
-      // print("Name ${food.name}");
-      // print("cantidad ${food.quantity}");
-      // print("unidad ${food.unitCost}");
-      // print("costo ${food.cost}");
-      // print("cantidad ${food.quantity}, tipo ${food.quantity.runtimeType} ");
-
       sheet.appendRow([
         xls.TextCellValue(food.name),
         xls.TextCellValue(food.quantity.toString()),
