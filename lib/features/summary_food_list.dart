@@ -7,6 +7,8 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:external_path/external_path.dart';
 import 'package:provider/provider.dart';
+import 'package:excel/excel.dart' as xls;
+import 'package:path/path.dart';
 
 class SummaryFoodScreen extends StatefulWidget {
   const SummaryFoodScreen({
@@ -94,12 +96,36 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
                 child: const Text('PDF'),
               ),
               ElevatedButton(
-                onPressed: () {
-                  // Guardar en Excel
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Próximamente...'),
-                    ),
+                onPressed: () async {
+                  final filenameController = TextEditingController();
+                  await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Nombre del archivo'),
+                        content: TextField(
+                          controller: filenameController,
+                          decoration: const InputDecoration(
+                            labelText: 'Ingrese el nombre del archivo',
+                          ),
+                        ),
+                        actions: [
+                          TextButton(
+                            child: const Text('Guardar'),
+                            onPressed: () {
+                              _saveToExcel(filenameController.text, foods);
+                              Navigator.pop(context);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      'El documento Excel se guardó correctamente en la carpeta descarga'),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      );
+                    },
                   );
                 },
                 child: const Text('Excel'),
@@ -171,7 +197,7 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
                       ),
                       IconButton(
                         icon: const Icon(Icons.edit),
-                        onPressed: () => _editUnitCost(food, foods),
+                        onPressed: () => _editUnitCost(context, food, foods),
                       ),
                     ],
                   ),
@@ -228,7 +254,7 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
     //o 1 para el precio unitario desde el main.dart
     for (final food in foods) {
       food.quantity = 1;
-      food.cost = food.unitCost;
+      food.cost = double.parse(food.unitCost!.toStringAsFixed(2));
     }
     _totalQuantity = 0;
     _totalCost = 0;
@@ -364,9 +390,10 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
     }
   }
 
-  void _editUnitCost(FoodModel food, List<FoodModel> foods) {
+  void _editUnitCost(
+      BuildContext _context, FoodModel food, List<FoodModel> foods) {
     showDialog(
-      context: context,
+      context: _context,
       builder: (context) {
         final TextEditingController costController =
             TextEditingController(text: food.unitCost.toString());
@@ -394,7 +421,9 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
                   // El valor no está vacío
                   food.unitCost = double.parse(costController.text);
                 }
-                food.cost = food.unitCost! * food.quantity!;
+                food.cost = food.unitCost * food.quantity;
+                food.cost = double.parse(food.cost.toStringAsFixed(2));
+
                 _calculateTotalCost(foods);
                 setState(() {});
                 Navigator.pop(context);
@@ -404,5 +433,63 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
         );
       },
     );
+  }
+
+  void _saveToExcel(String name, List<FoodModel> foods) async {
+    final excel = xls.Excel.createExcel();
+    final creationDate = DateTime.now();
+    final currentTime = DateFormat('HH-mm dd-MM-yyyy').format(creationDate);
+
+    var sheet = excel['Sheet1'];
+
+    var cell = sheet.cell(xls.CellIndex.indexByString("A1"));
+    cell.value = const xls.TextCellValue("Lista de Alimentos");
+    cell.cellStyle = xls.CellStyle(numberFormat: xls.NumFormat.standard_1);
+
+    List<List<xls.TextCellValue>> list = List.generate(
+      1,
+      (index) => [
+        const xls.TextCellValue('Nombre'),
+        const xls.TextCellValue('Cantidad'),
+        const xls.TextCellValue('Costo'),
+        const xls.TextCellValue('Costo x Unidad'),
+      ],
+    );
+
+    for (var row in list) {
+      sheet.appendRow(row);
+    }
+
+    for (final food in foods) {
+      // print("Name ${food.name}");
+      // print("cantidad ${food.quantity}");
+      // print("unidad ${food.unitCost}");
+      // print("costo ${food.cost}");
+      // print("cantidad ${food.quantity}, tipo ${food.quantity.runtimeType} ");
+
+      sheet.appendRow([
+        xls.TextCellValue(food.name),
+        xls.TextCellValue(food.quantity.toString()),
+        xls.TextCellValue(food.unitCost.toString()),
+        xls.TextCellValue(food.cost.toString()),
+      ]);
+    }
+
+    sheet.appendRow([
+      xls.TextCellValue("Cantidad Total $_totalQuantity"),
+      xls.TextCellValue("Costo Total $_totalCost"),
+    ]);
+
+    var fileBytes = excel.save();
+
+    // Get external storage directory
+    final path = await ExternalPath.getExternalStoragePublicDirectory(
+        ExternalPath.DIRECTORY_DOWNLOADS);
+
+    if (fileBytes != null) {
+      File(join('$path/$name $currentTime.xlsx'))
+        ..createSync(recursive: true)
+        ..writeAsBytesSync(fileBytes);
+    }
   }
 }

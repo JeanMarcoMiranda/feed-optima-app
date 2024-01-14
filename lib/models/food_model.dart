@@ -12,9 +12,9 @@ class FoodModel {
   final double? fdn;
   final double? vitaminA;
   final double? vitaminD;
-  double? quantity;
-  double? cost;
-  double? unitCost;
+  double quantity;
+  double cost;
+  double unitCost;
 
   FoodModel({
     this.id,
@@ -30,9 +30,9 @@ class FoodModel {
     this.fdn,
     this.vitaminA,
     this.vitaminD,
-    this.quantity,
-    this.cost,
-    this.unitCost,
+    this.quantity = 0,
+    this.cost = 0,
+    this.unitCost = 0,
   });
 
   // Función factory para crear un objeto FoodModel a partir de un mapa
