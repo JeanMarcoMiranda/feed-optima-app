@@ -29,7 +29,6 @@ class _RequirementsScreenState extends State<RequirementsScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
     if (widget.requirementsFor == 'bulls') {
       _fetchBullRequirements();
     } else {

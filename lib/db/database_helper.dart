@@ -51,5 +51,7 @@ class DatabaseHelper {
     await db.execute(createBullRequirementsTable);
     await db.execute(createCowRequirementsTable);
     await db.execute(createRestrictionsTable);
+    await db.execute(createListFoodTable);
+    await db.execute(createFoodForFoodListTable);
   }
 }
