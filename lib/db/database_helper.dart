@@ -28,26 +28,7 @@ class DatabaseHelper {
   }
 
   Future<void> _onCreate(Database db, int version) async {
-    await db.execute('''
-      CREATE TABLE alimentos (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT,
-        dryMatter DOUBLE,
-        totalProtein DOUBLE,
-        netEnergyG DOUBLE,
-        metabolizableEnergy DOUBLE,
-        ndt DOUBLE,
-        calcium DOUBLE,
-        phosphorus DOUBLE,
-        crudeFiber DOUBLE,
-        fdn DOUBLE,
-        vitaminA DOUBLE,
-        vitaminD DOUBLE,
-        quantity DOUBLE,
-        cost DOUBLE,
-        unitCost DOUBLE
-      );
-    ''');
+    await db.execute(createFoodTable);
     await db.execute(createBullRequirementsTable);
     await db.execute(createCowRequirementsTable);
     await db.execute(createRestrictionsTable);

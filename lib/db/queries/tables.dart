@@ -1,3 +1,24 @@
+const createFoodTable = """
+      CREATE TABLE alimentos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        dryMatter DOUBLE,
+        totalProtein DOUBLE,
+        netEnergyG DOUBLE,
+        metabolizableEnergy DOUBLE,
+        ndt DOUBLE,
+        calcium DOUBLE,
+        phosphorus DOUBLE,
+        crudeFiber DOUBLE,
+        fdn DOUBLE,
+        vitaminA DOUBLE,
+        vitaminD DOUBLE,
+        quantity DOUBLE,
+        cost DOUBLE,
+        unitCost DOUBLE
+      );
+""";
+
 const createCowRequirementsTable = """
       CREATE TABLE requerimientosVacas (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -39,7 +60,8 @@ const createRestrictionsTable = """
 const createListFoodTable = """
     CREATE TABLE listaAlimentos (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      precio_total DOUBLE
+      name TEXT,
+      totalCost DOUBLE
     );
 """;
 

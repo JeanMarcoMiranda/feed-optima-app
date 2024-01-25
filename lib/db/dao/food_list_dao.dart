@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:foodoptima/db/dao/food_dao.dart';
 import 'package:foodoptima/db/database_helper.dart';
 import 'package:foodoptima/models/food_list_model.dart';
@@ -24,10 +23,10 @@ class FoodListDao {
   }
 
   // Add foods to foodList
-  Future<int> insertListFoodWithFOods(
+  Future<int> insertListFoodWithFoods(
       FoodListModel list, List<FoodModel> foods) async {
     final db = await dbHelper;
-    final listId = insert(list);
+    final listId = await insert(list);
 
     for (final food in foods) {
       db.insert("alimentoParaListaAlimentos",

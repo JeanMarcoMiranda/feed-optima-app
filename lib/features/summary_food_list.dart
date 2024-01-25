@@ -1,7 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:foodoptima/application/routes/app_router.dart';
+import 'package:foodoptima/db/dao/food_list_dao.dart';
+import 'package:foodoptima/models/food_list_model.dart';
 import 'package:foodoptima/models/food_model.dart';
 import 'package:foodoptima/providers/food_provider.dart';
+import 'package:foodoptima/widgets/appbar_widget.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -25,226 +30,333 @@ class _SummaryFoodState extends State<SummaryFoodScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final foodListDao = FoodListDao();
     final List<FoodModel> foods = context.watch<FoodProvider>().foodList;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Center(
-          child: Text(
-            'Lista de Alimentos',
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
-          ),
-        ),
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(15),
-          ),
-        ),
-      ),
-      body: Column(
-        children: [
-          const SizedBox(
-            height: 25,
-          ),
-          const Text(
-            'Guardar en:',
-            style: TextStyle(fontSize: 18),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  // Guardar en PDF
-                  final nameFileController = TextEditingController();
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text('Nombre del archivo'),
-                        content: TextField(
-                          controller: nameFileController,
-                          decoration: const InputDecoration(
-                            labelText: 'Ingrese el name del archivo',
-                          ),
-                        ),
-                        actions: [
-                          TextButton(
-                            child: const Text('Guardar'),
-                            onPressed: () {
-                              // Guarda el documento PDF con el name especificado por el usuario
-                              _saveToPDF(nameFileController.text, foods);
-                              Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                      'El documento PDF se guardó correctamente en la carpeta descarga'),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                child: const Text('PDF'),
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  final filenameController = TextEditingController();
-                  await showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text('Nombre del archivo'),
-                        content: TextField(
-                          controller: filenameController,
-                          decoration: const InputDecoration(
-                            labelText: 'Ingrese el nombre del archivo',
-                          ),
-                        ),
-                        actions: [
-                          TextButton(
-                            child: const Text('Guardar'),
-                            onPressed: () {
-                              _saveToExcel(filenameController.text, foods);
-                              Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                      'El documento Excel se guardó correctamente en la carpeta descarga'),
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                child: const Text('Excel'),
-              ),
-            ],
-          ),
-          Container(
-            // padding: const EdgeInsets.all(15),
-            padding: const EdgeInsets.fromLTRB(15, 30, 15, 15),
-            child: TextField(
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                labelText: 'Cantidad total (kg)',
-                hintText: "Ejemplo: 20kg",
-                hintStyle: const TextStyle(color: Colors.black26),
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.black12),
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.black12),
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-              onChanged: (value) {
-                if (value.isEmpty) {
-                  setState(() {
-                    _resetList(foods);
-                  });
-                } else {
-                  setState(() {
-                    _updateList(double.parse(value), foods);
-                  });
-                }
-              },
-            ),
-          ),
-          Expanded(
-            child: ListView.separated(
-              itemCount: foods.length,
-              itemBuilder: (context, index) {
-                final food = foods[index];
-                return ListTile(
-                  title: Text(
-                    food.name,
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                  subtitle: Text(
-                    'Cantidad: ${food.quantity} kg',
-                    style: const TextStyle(fontSize: 15, color: Colors.grey),
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Costo x Unidad: S/.${food.unitCost}',
-                            style: const TextStyle(
-                                fontSize: 14, color: Colors.blue),
-                          ),
-                          Text(
-                            'Costo: S/.${food.cost}',
-                            style: const TextStyle(
-                                fontSize: 14, color: Colors.green),
-                          ),
-                        ],
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.edit),
-                        onPressed: () => _editUnitCost(context, food, foods),
-                      ),
-                    ],
-                  ),
-                );
-              },
-              separatorBuilder: (context, index) =>
-                  const Divider(color: Colors.grey, thickness: 1),
-            ),
-          ),
-          Container(
-            width: double.infinity,
-            height: 60,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.black,
-                width: 1,
-              ),
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(5),
-                topRight: Radius.circular(5),
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text(
-                  'Cantidad total: $_totalQuantity kg',
-                  style: const TextStyle(
-                    fontSize: 15,
-                  ),
-                ),
-                const Text(
-                  ' | ',
-                  style: TextStyle(
-                    fontSize: 15,
-                  ),
-                ),
-                Text(
-                  'Coste total: S/.$_totalCost',
-                  style: const TextStyle(
-                    fontSize: 15,
-                  ),
+      // appBar: AppBar(
+      //   title: const Center(
+      //     child: Text(
+      //       'Lista de Alimentos',
+      //       style: TextStyle(
+      //           color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
+      //     ),
+      //   ),
+      //   shape: const RoundedRectangleBorder(
+      //     borderRadius: BorderRadius.vertical(
+      //       bottom: Radius.circular(15),
+      //     ),
+      //   ),
+      // ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            CustomAppBar(
+              title: "Final",
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    context.pushNamed(RouteNames.home);
+                  },
+                  icon: const Icon(Icons.home),
                 ),
               ],
             ),
-          ),
-        ],
+            Expanded(
+              child: Column(
+                children: [
+                  const Text(
+                    'Guardar en:',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(15), // Adjust as needed
+                          ),
+                        ),
+                        onPressed: () {
+                          // Guardar en PDF
+                          final nameFileController = TextEditingController();
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Nombre del archivo'),
+                                content: TextField(
+                                  controller: nameFileController,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Ingrese el name del archivo',
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    child: const Text('Guardar'),
+                                    onPressed: () {
+                                      // Guarda el documento PDF con el name especificado por el usuario
+                                      _saveToPDF(
+                                          nameFileController.text, foods);
+                                      Navigator.pop(context);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                              'El documento PDF se guardó correctamente en la carpeta descarga'),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: const Row(
+                          mainAxisSize: MainAxisSize
+                              .min, // Ensure icon and text fit together
+                          children: [
+                            Icon(Icons
+                                .picture_as_pdf), // Replace with your desired PDF icon
+                            SizedBox(width: 6),
+                            Text('PDF'),
+                          ],
+                        ),
+                      ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(15), // Adjust as needed
+                          ),
+                        ),
+                        onPressed: () async {
+                          final nameFileController = TextEditingController();
+                          await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Nombre del archivo'),
+                                content: TextField(
+                                  controller: nameFileController,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Ingrese el nombre del archivo',
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    child: const Text('Guardar'),
+                                    onPressed: () {
+                                      _saveToExcel(
+                                          nameFileController.text, foods);
+                                      Navigator.pop(context);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                              'El documento Excel se guardó correctamente en la carpeta descarga'),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons
+                                .table_chart), // Replace with your desired Excel icon
+                            SizedBox(width: 6),
+                            Text('Excel'),
+                          ],
+                        ),
+                      ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(15), // Adjust as needed
+                          ),
+                        ),
+                        onPressed: () async {
+                          final nameFileController = TextEditingController();
+                          await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Nombre de la lista'),
+                                content: TextField(
+                                  controller: nameFileController,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Ingrese el nombre de la lista',
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    child: const Text('Guardar'),
+                                    onPressed: () async {
+                                      final list = FoodListModel(
+                                        name: nameFileController.text,
+                                        totalCost: _totalCost,
+                                      );
+                                      await foodListDao.insertListFoodWithFoods(
+                                          list, foods);
+                                      Navigator.pop(context);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                              'La lista se guardó correctamente en la aplicación'),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons
+                                .star), // Replace with your desired Favorites icon
+                            SizedBox(width: 6),
+                            Text('Favoritos'),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    // padding: const EdgeInsets.all(15),
+                    padding: const EdgeInsets.fromLTRB(15, 30, 15, 15),
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: 'Cantidad total (kg)',
+                        hintText: "Ejemplo: 20kg",
+                        hintStyle: const TextStyle(color: Colors.black26),
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.black12),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.black12),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                      ),
+                      onChanged: (value) {
+                        if (value.isEmpty) {
+                          setState(() {
+                            _resetList(foods);
+                          });
+                        } else {
+                          setState(() {
+                            _updateList(double.parse(value), foods);
+                          });
+                        }
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView.separated(
+                      itemCount: foods.length,
+                      itemBuilder: (context, index) {
+                        final food = foods[index];
+                        return ListTile(
+                          title: Text(
+                            food.name,
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                          subtitle: Text(
+                            'Cantidad: ${food.quantity} kg',
+                            style: const TextStyle(
+                                fontSize: 15, color: Colors.grey),
+                          ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Costo x Unidad: S/.${food.unitCost}',
+                                    style: const TextStyle(
+                                        fontSize: 14, color: Colors.blue),
+                                  ),
+                                  Text(
+                                    'Costo: S/.${food.cost}',
+                                    style: const TextStyle(
+                                        fontSize: 14, color: Colors.green),
+                                  ),
+                                ],
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.edit),
+                                onPressed: () =>
+                                    _editUnitCost(context, food, foods),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) =>
+                          const Divider(color: Colors.grey, thickness: 1),
+                    ),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 1,
+                      ),
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(5),
+                        topRight: Radius.circular(5),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          'Cantidad total: $_totalQuantity kg',
+                          style: const TextStyle(
+                            fontSize: 15,
+                          ),
+                        ),
+                        const Text(
+                          ' | ',
+                          style: TextStyle(
+                            fontSize: 15,
+                          ),
+                        ),
+                        Text(
+                          'Coste total: S/.$_totalCost',
+                          style: const TextStyle(
+                            fontSize: 15,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

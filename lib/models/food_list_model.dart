@@ -1,16 +1,19 @@
 class FoodListModel {
   final int? id;
-  final double precio_total;
+  final String name;
+  final double totalCost;
 
-  FoodListModel({this.id, required this.precio_total});
+  FoodListModel({this.id, required this.name, required this.totalCost});
 
   factory FoodListModel.fromJson(Map<String, dynamic> map) {
     return FoodListModel(
-        id: map['id'] as int, precio_total: map['precio_total'] as double);
+        id: map['id'] as int,
+        name: map['name'] as String,
+        totalCost: map['totalCost'] as double);
   }
 
   Map<String, dynamic> toMap() {
-    return {'id': id, 'precio_total': precio_total};
+    return {'id': id, 'name': name, 'totalCost': totalCost};
   }
 }
 
@@ -18,7 +21,10 @@ class FoodForFoodList {
   final int? alimentoId;
   final int? listaAlimentoId;
 
-  FoodForFoodList({required this.alimentoId, required this.listaAlimentoId});
+  FoodForFoodList({
+    required this.alimentoId,
+    required this.listaAlimentoId,
+  });
 
   factory FoodForFoodList.fromJson(Map<String, dynamic> map) {
     return FoodForFoodList(
