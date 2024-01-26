@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodoptima/db/dao/food_list_dao.dart';
 import 'package:foodoptima/models/food_list_model.dart';
-import 'package:foodoptima/models/previous_list_state.dart';
 import 'package:foodoptima/widgets/appbar_widget.dart';
 
 class PreviousListsScreen extends StatefulWidget {

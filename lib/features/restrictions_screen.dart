@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:foodoptima/models/restriction_model.dart';
 import 'package:foodoptima/application/routes/app_router.dart';
 import 'package:foodoptima/widgets/appbar_widget.dart';
+import 'package:foodoptima/widgets/expansion_tile_widget.dart';
 import 'package:go_router/go_router.dart';
 
 class RestrictionsScreen extends StatefulWidget {
@@ -18,7 +19,6 @@ class _RestrictionsScreenState extends State<RestrictionsScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _loadCSV();
   }
@@ -47,13 +47,20 @@ class _RestrictionsScreenState extends State<RestrictionsScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            CustomAppBar(
+            const CustomAppBar(
               title: "Lista de Restricciones",
               fontSize: 25,
             ),
             Expanded(
-              child: ListView(
-                children: [...restrictions.map(restrictionsListItem)],
+              child: ListView.builder(
+                itemCount: restrictions.length,
+                itemBuilder: (context, index) {
+                  final restriction = restrictions[index];
+                  return CustomExpansionTile(
+                    title: restriction.alimento!,
+                    subTitle: restriction.restriccion!,
+                  );
+                },
               ),
             ),
           ],
@@ -89,7 +96,7 @@ class _RestrictionsScreenState extends State<RestrictionsScreen> {
     );
   }
 
-  Widget restrictionsListItem(RestrictionState state) => CheckboxListTile(
+  /*Widget restrictionsListItem(RestrictionState state) => CheckboxListTile(
         controlAffinity: ListTileControlAffinity.leading,
         title: Text(
           state.alimento!,
@@ -100,5 +107,11 @@ class _RestrictionsScreenState extends State<RestrictionsScreen> {
         onChanged: (value) {
           setState(() => state.isSelected = value!);
         },
+      );*/
+
+  Widget restrictionsListItem(RestrictionState state) => ExpansionTile(
+        title: Text(state.alimento!,
+            style: const TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: Text(state.restriccion!),
       );
 }
